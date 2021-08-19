@@ -420,6 +420,42 @@ namespace LeetCode
             }
             return result.next; //answer從前一位數開始，所以取下一位
         }
+        /// <summary>
+        /// Problems 94. Binary Tree Inorder Traversal
+        /// </summary>
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+        public static IList<int> InorderTraversal(TreeNode root)
+        {
+            List<int> result = new List<int>();
+            TreeNode currentTN = root;
+            Stack<TreeNode> TN_seq = new Stack<TreeNode>();
+            while (currentTN != null || TN_seq.Count > 0)
+            {
+                while (currentTN != null)
+                {
+                    TN_seq.Push(currentTN);
+                    currentTN = currentTN.left;
+                }
+                if (TN_seq.Count > 0)
+                {
+                    currentTN = TN_seq.Pop();
+                    result.Add(currentTN.val);
+                    currentTN = currentTN.right;
+                }
+            }
+            return result;
+        }
 
         /// <summary>
         /// Problems 
@@ -499,6 +535,7 @@ namespace LeetCode
                 }
             return Largest;
         }
+
     }
     public class Topic
     {

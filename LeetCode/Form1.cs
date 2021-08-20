@@ -25,6 +25,7 @@ namespace LeetCode
             //Console.WriteLine(Problems.AddBinary("11", "1"));
             //Console.WriteLine(Problems.MySqrt(5));
             //Console.WriteLine(Problems.ClimbStairs(35));
+            IsSameTree();
         }
 
         private void MergeTwoLists() // Ex.21
@@ -98,6 +99,168 @@ namespace LeetCode
             }
             Console.WriteLine(Problems.InorderTraversal(root));
         }
+        private void PreorderTraversal() // Ex.144
+        {
+            object[] testcase = new object[] { 1, null, 2, 3, 4, 5, 6, null, null, null, null, 8 };
+            Problems.TreeNode root, root_now;
+            if (testcase.Length == 0)
+                root = null;
+            else
+                root = new Problems.TreeNode((int)testcase[0], null, null);
+            Queue<Problems.TreeNode> root_seq = new Queue<Problems.TreeNode>();
+            root_seq.Enqueue(root);
+            int now = 1;
+            while (testcase.Length > now)
+            {
+                root_now = root_seq.Dequeue();
+                if (testcase[now] != null)
+                {
+                    root_now.left = new Problems.TreeNode((int)testcase[now], null, null);
+                    root_seq.Enqueue(root_now.left);
+                }
+                else
+                    root_now.left = null;
+
+                now++;
+                if (testcase.Length <= now) break;
+
+                if (testcase[now] != null)
+                {
+                    root_now.right = new Problems.TreeNode((int)testcase[now], null, null);
+                    root_seq.Enqueue(root_now.right);
+                }
+                else
+                    root_now.right = null;
+                now++;
+            }
+            while (root_seq.Count > 0)
+            {
+                root_now = root_seq.Dequeue();
+                root_now = null;
+            }
+            Console.WriteLine(Problems.PreorderTraversal(root));
+        }
+        private void PostorderTraversal() // Ex.145
+        {
+            object[] testcase = new object[] { 1, null, 2, 3, 4, 5, 6, null, null, null, null, 8 };
+            Problems.TreeNode root, root_now;
+            if (testcase.Length == 0)
+                root = null;
+            else
+                root = new Problems.TreeNode((int)testcase[0], null, null);
+            Queue<Problems.TreeNode> root_seq = new Queue<Problems.TreeNode>();
+            root_seq.Enqueue(root);
+            int now = 1;
+            while (testcase.Length > now)
+            {
+                root_now = root_seq.Dequeue();
+                if (testcase[now] != null)
+                {
+                    root_now.left = new Problems.TreeNode((int)testcase[now], null, null);
+                    root_seq.Enqueue(root_now.left);
+                }
+                else
+                    root_now.left = null;
+
+                now++;
+                if (testcase.Length <= now) break;
+
+                if (testcase[now] != null)
+                {
+                    root_now.right = new Problems.TreeNode((int)testcase[now], null, null);
+                    root_seq.Enqueue(root_now.right);
+                }
+                else
+                    root_now.right = null;
+                now++;
+            }
+            while (root_seq.Count > 0)
+            {
+                root_now = root_seq.Dequeue();
+                root_now = null;
+            }
+            Console.WriteLine(Problems.PostorderTraversal(root));
+        }
+        private void IsSameTree() // Ex.100
+        {
+            object[] testcase_p = new object[] {  }
+                , testcase_q = new object[] { 0 };
+            Problems.TreeNode p, p_now, q, q_now;
+            Queue<Problems.TreeNode> p_seq = new Queue<Problems.TreeNode>()
+                , q_seq = new Queue<Problems.TreeNode>();
+
+            if (testcase_p.Length == 0)
+                p = null;
+            else
+                p = new Problems.TreeNode((int)testcase_p[0], null, null);            
+            p_seq.Enqueue(p);
+            int now = 1;
+            while (testcase_p.Length > now)
+            {
+                p_now = p_seq.Dequeue();
+                if (testcase_p[now] != null)
+                {
+                    p_now.left = new Problems.TreeNode((int)testcase_p[now], null, null);
+                    p_seq.Enqueue(p_now.left);
+                }
+                else
+                    p_now.left = null;
+
+                now++;
+                if (testcase_p.Length <= now) break;
+
+                if (testcase_p[now] != null)
+                {
+                    p_now.right = new Problems.TreeNode((int)testcase_p[now], null, null);
+                    p_seq.Enqueue(p_now.right);
+                }
+                else
+                    p_now.right = null;
+                now++;
+            }
+            while (p_seq.Count > 0)
+            {
+                p_now = p_seq.Dequeue();
+                p_now = null;
+            }
+
+            if (testcase_q.Length == 0)
+                q = null;
+            else
+                q = new Problems.TreeNode((int)testcase_q[0], null, null);
+            q_seq.Enqueue(q);
+            now = 1;
+            while (testcase_q.Length > now)
+            {
+                q_now = q_seq.Dequeue();
+                if (testcase_q[now] != null)
+                {
+                    q_now.left = new Problems.TreeNode((int)testcase_q[now], null, null);
+                    q_seq.Enqueue(q_now.left);
+                }
+                else
+                    q_now.left = null;
+
+                now++;
+                if (testcase_q.Length <= now) break;
+
+                if (testcase_q[now] != null)
+                {
+                    q_now.right = new Problems.TreeNode((int)testcase_q[now], null, null);
+                    q_seq.Enqueue(q_now.right);
+                }
+                else
+                    q_now.right = null;
+                now++;
+            }
+            while (q_seq.Count > 0)
+            {
+                q_now = q_seq.Dequeue();
+                q_now = null;
+            }
+            Console.WriteLine(Problems.IsSameTree(p, q));
+        }
+
         private void LargestIsland() // Ex.827
         {
             List<int[][]> list_grid = new List<int[][]>();

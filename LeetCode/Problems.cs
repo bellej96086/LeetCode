@@ -437,6 +437,7 @@ namespace LeetCode
         }
         public static IList<int> InorderTraversal(TreeNode root)
         {
+            //Left>Mid>Rigft
             List<int> result = new List<int>();
             TreeNode currentTN = root;
             Stack<TreeNode> TN_seq = new Stack<TreeNode>();
@@ -456,6 +457,89 @@ namespace LeetCode
             }
             return result;
         }
+        /// <summary>
+        /// Problems 144. Binary Tree Preorder Traversal
+        /// </summary>
+        public static IList<int> PreorderTraversal(TreeNode root)
+        {
+            //Mid>Left>Right
+            List<int> result = new List<int>();
+            TreeNode currentTN = root;
+            Stack<TreeNode> TN_seq = new Stack<TreeNode>();
+            while (currentTN != null || TN_seq.Count > 0)
+            {
+                while (currentTN != null)
+                {
+                    TN_seq.Push(currentTN);
+                    result.Add(currentTN.val);
+                    currentTN = currentTN.left;
+                }
+                if (TN_seq.Count > 0)
+                {
+                    currentTN = TN_seq.Pop();
+                    currentTN = currentTN.right;
+                }
+            }
+            return result;
+        }
+        /// <summary>
+        /// Problems 145. Binary Tree Postorder Traversal
+        /// </summary>
+        public static IList<int> PostorderTraversal(TreeNode root)
+        {
+            //Left>Right>Mid
+            List<int> result = new List<int>();
+            TreeNode currentTN = root;
+            Stack<TreeNode> TN_seq = new Stack<TreeNode>();
+            while (currentTN != null || TN_seq.Count > 0)
+            {
+                while (currentTN != null)
+                {
+                    TN_seq.Push(currentTN);
+                    result.Insert(0, currentTN.val);
+                    currentTN = currentTN.right;
+                }
+                if (TN_seq.Count > 0)
+                {
+                    currentTN = TN_seq.Pop();
+                    currentTN = currentTN.left;
+                }
+            }
+            return result;
+        }
+        /// <summary>
+        /// Problems 100. Same Tree
+        /// </summary>
+        public static bool IsSameTree(TreeNode p, TreeNode q)
+        {
+            TreeNode current_p = p, current_q = q;
+            Stack<TreeNode> p_seq = new Stack<TreeNode>(), q_seq = new Stack<TreeNode>();
+            while (current_p != null || current_q != null || p_seq.Count > 0 || q_seq.Count > 0)
+            {
+                while (current_p != null)
+                {
+                    p_seq.Push(current_p);
+                    current_p = current_p.left;
+                }
+                while (current_q != null)
+                {
+                    q_seq.Push(current_q);
+                    current_q = current_q.left;
+                }
+                if (p_seq.Count != q_seq.Count)
+                    return false;
+                else if (p_seq.Count > 0 || q_seq.Count > 0)
+                {
+                    current_p = p_seq.Pop();
+                    current_q = q_seq.Pop();
+                    if (current_p.val != current_q.val) return false;
+                    current_p = current_p.right;
+                    current_q = current_q.right;
+                }
+            }
+            return true;
+        }
+
 
         /// <summary>
         /// Problems 
@@ -536,6 +620,206 @@ namespace LeetCode
             return Largest;
         }
 
+        /// <summary>
+        /// Problems 175. Combine Two Tables
+        /// </summary>
+        public static string Combine_Two_Tables(string Language)
+        {
+            switch (Language)
+            {
+                case "PLSQL":
+                    return @"Select FirstName, LastName, City, State From Person p, Address a Where p.PersonId = a.PersonId(+)";
+                    break;
+                case "MYSQL":
+                    return @"Select FirstName, LastName, City, State From Person left join Address on Address.PersonId = Person.PersonId";
+                    break;
+                case "MSSQL":
+                    return @"Select FirstName, LastName, City, State From Person left join Address on Address.PersonId = Person.PersonId";
+                    break;
+            }
+            return "Fault Language";
+        }
+        /// <summary>
+        /// Problems 176. Second Highest Salary
+        /// </summary>
+        public static string Second_Highest_Salary(string Language)
+        {
+            switch (Language)
+            {
+                case "PLSQL":
+                    return @"Select case when count(Salary) < 2 then Max(Salary) else null end SecondHighestSalary 
+From
+    (Select rownum rn, Salary
+    From
+        (Select Salary
+        From Employee
+        Group by Salary
+        Order by Salary desc))
+Where rn = 2";
+                    break;
+                case "MYSQL":
+                    return @"Select case when count(Salary) = 2 then Min(Salary) else null end SecondHighestSalary 
+From
+    (Select Salary
+    From
+        (Select Salary
+        From Employee
+        Group by Salary
+        Order by Salary desc) e
+    Limit 2) e";
+                    break;
+                case "MSSQL":
+                    return @"Select case when count(Salary) = 2 then Min(Salary) else null end SecondHighestSalary 
+From    
+    (Select Top 2 Salary
+    From Employee
+    Group by Salary
+    Order by Salary desc) Employee";
+                    break;
+            }
+            return "Fault Language";
+        }
+        /// <summary>
+        /// Problems 177. Nth Highest Salary
+        /// </summary>
+        public static string Nth_Highest_Salary(string Language)
+        {
+            switch (Language)
+            {
+                case "PLSQL":
+                    return @"CREATE FUNCTION getNthHighestSalary(N IN NUMBER) RETURN NUMBER IS
+result NUMBER;
+BEGIN
+    /* Write your PL/SQL query statement below */
+    Select case when count(Salary) = 1 then Min(Salary) else null end INTO result 
+    From
+        (Select rownum rn, Salary
+        From
+            (Select Salary
+            From Employee
+            Group by Salary
+            Order by Salary desc))
+    Where rn = N;
+
+    RETURN result;
+END;";
+                    break;
+                case "MYSQL":
+                    return @"CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+  RETURN (
+      # Write your MySQL query statement below.
+      Select case when count(Salary) = N then Min(Salary) else null end SecondHighestSalary 
+      From
+        (Select Salary
+        From
+            (Select Salary
+            From Employee
+            Group by Salary
+            Order by Salary desc) e
+        Limit N) e    
+  );
+END";
+                    break;
+                case "MSSQL":
+                    return @"CREATE FUNCTION getNthHighestSalary(@N INT) RETURNS INT AS
+BEGIN
+    RETURN (
+        /* Write your T-SQL query statement below. */
+        Select case when count(Salary) = @N then Min(Salary) else null end SecondHighestSalary 
+        From    
+            (Select Top (@N) Salary
+            From Employee
+            Group by Salary
+            Order by Salary desc) Employee
+    );
+END";
+                    break;
+            }
+            return "Fault Language";
+        }
+        /// <summary>
+        /// Problems 178. Rank Scores
+        /// </summary>
+        public static string Rank_Scores(string Language)
+        {
+            switch (Language)
+            {
+                case "PLSQL":
+                    return @"select A.score, B.rk as Rank
+from Scores A
+    , (select score, rownum rk 
+        from (SELECT score 
+              FROM Scores 
+              GROUP BY score
+              ORDER BY Score DESC)) B
+where A.score = B.score(+)
+ORDER BY Score DESC";
+                    break;
+                case "MYSQL":
+                    return @"select A.score, B.rk `Rank`
+from Scores A
+    left join (select score, ROW_NUMBER() OVER(ORDER BY Score desc) rk 
+                from (SELECT score 
+                      FROM Scores 
+                      GROUP BY score
+                      ORDER BY Score DESC) B) B on A.score = B.score
+ORDER BY Score DESC";
+                    break;
+                case "MSSQL":
+                    return @"select top 10000 A.score, B.rk as Rank
+from Scores A
+    left join (select top 10000 score, ROW_NUMBER() OVER(ORDER BY Score desc) rk 
+                from (SELECT top 10000 score 
+                      FROM Scores 
+                      GROUP BY score
+                      ORDER BY Score DESC) B) B on A.score = B.score
+ORDER BY Score DESC";
+                    break;
+            }
+            return "Fault Language";
+        }
+        /// <summary>
+        /// Problems 180. Consecutive Numbers
+        /// </summary>
+        public static string Consecutive_Numbers(string Language) 
+        {
+            switch (Language)
+            {
+                case "PLSQL":
+                    return @"select distinct num ConsecutiveNums 
+                    from
+                        (select logs.*
+                            , case when num != nvl(lead(num) over (order by id asc), num - 1) then 0 else 1 end as next
+                            , case when num != nvl(lag(num) over (order by id asc), num - 1) then 0 else 1 end as back 
+                        from Logs
+                        order by id asc) logs
+                    where next = 1 and back = 1";
+                    break;
+                case "MYSQL":
+                    return @"select distinct num ConsecutiveNums 
+from
+    (select logs.*
+        , case when num != IFNULL(lead(num) over (order by id asc), num - 1) then 0 else 1 end as next
+        , case when num != IFNULL(lag(num) over (order by id asc), num - 1) then 0 else 1 end as back 
+    from Logs
+    order by id asc) logs
+where next = 1 and back = 1";
+                    break;
+                case "MSSQL":
+                    return @"select distinct num ConsecutiveNums 
+from
+    (select top 10000 logs.*
+        , case when num != ISNULL(lead(num) over (order by id asc), num - 1) then 0 else 1 end as next
+        , case when num != ISNULL(lag(num) over (order by id asc), num - 1) then 0 else 1 end as back 
+    from Logs
+    order by id asc) logs
+where next = 1 and back = 1";
+                    break;
+            }
+            return "Fault Language";
+        } 
+            
     }
     public class Topic
     {

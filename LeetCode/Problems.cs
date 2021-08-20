@@ -818,8 +818,133 @@ where next = 1 and back = 1";
                     break;
             }
             return "Fault Language";
-        } 
-            
+        }
+        /// <summary>
+        /// Problems 181. Employees Earning More Than Their Managers
+        /// </summary>
+        public static string Employees_Earning_More_Than_Their_Managers(string Language)
+        {
+            switch (Language)
+            {
+                case "PLSQL":
+                    return @"select name Employee
+from Employee e
+where managerid is not null 
+    and salary > (select salary from employee m where m.id = e.managerid)";
+                    break;
+                case "MYSQL":
+                    return @"select name Employee
+from Employee e
+where managerid is not null 
+    and salary > (select salary from employee m where m.id = e.managerid)";
+                    break;
+                case "MSSQL":
+                    return @"select name Employee
+from Employee e
+where managerid is not null 
+    and salary > (select salary from employee m where m.id = e.managerid)";
+                    break;
+            }
+            return "Fault Language";
+        }
+        /// <summary>
+        /// Problems 182. Duplicate Emails
+        /// </summary>
+        public static string Duplicate_Emails(string Language)
+        {
+            switch (Language)
+            {
+                case "PLSQL":
+                    return @"select Email
+from Person
+group by email
+having count(email) > 1";
+                    break;
+                case "MYSQL":
+                    return @"select Email
+from Person
+group by email
+having count(email) > 1";
+                    break;
+                case "MSSQL":
+                    return @"select Email
+from Person
+group by email
+having count(email) > 1";
+                    break;
+            }
+            return "Fault Language";
+        }
+        /// <summary>
+        /// Problems 183. Customers Who Never Order
+        /// </summary>
+        public static string Customers_Who_Never_Order(string Language)
+        {
+            switch (Language)
+            {
+                case "PLSQL":
+                    return @"select name as Customers
+from customers c
+    , orders o
+where c.id = o.customerid(+)
+    and o.id is null";
+                    break;
+                case "MYSQL":
+                    return @"select name as Customers
+from customers c
+    left join orders o on c.id = o.customerid
+where o.id is null";
+                    break;
+                case "MSSQL":
+                    return @"select name as Customers
+from customers c
+    left join orders o on c.id = o.customerid
+where o.id is null";
+                    break;
+            }
+            return "Fault Language";
+        }
+        /// <summary>
+        /// Problems 184. Department Highest Salary
+        /// </summary>
+        public static string Department_Highest_Salary(string Language)
+        {
+            switch (Language)
+            {
+                case "PLSQL":
+                    return @"";
+                    break;
+                case "MYSQL":
+                    return @"";
+                    break;
+                case "MSSQL":
+                    return @"";
+                    break;
+            }
+            return "Fault Language";
+        }
+
+        /// <summary>
+        /// Problems 
+        /// </summary>
+        public static string A(string Language)
+        {
+            switch (Language)
+            {
+                case "PLSQL":
+                    return @"";
+                    break;
+                case "MYSQL":
+                    return @"";
+                    break;
+                case "MSSQL":
+                    return @"";
+                    break;
+            }
+            return "Fault Language";
+        }
+
+
     }
     public class Topic
     {

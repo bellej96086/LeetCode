@@ -912,6 +912,212 @@ where o.id is null";
             switch (Language)
             {
                 case "PLSQL":
+                    return @"select d.name as Department
+    , e.name Employee
+    , e.Salary
+from Employee e
+    , Department d
+    , (select d.id, max(e.salary) salary
+        from Employee e, Department d
+        where e.departmentid = d.id(+)
+        group by d.id) hs
+where e.departmentid = d.id(+)
+    and e.salary = hs.salary
+    and d.id = hs.id";
+                    break;
+                case "MYSQL":
+                    return @"select d.name as Department
+    , e.name Employee
+    , e.Salary
+from Employee e
+	right join Department d on e.departmentid = d.id
+	right join (select d.id, max(e.salary) salary
+                from Employee e
+                    right join Department d on e.departmentid = d.id
+                group by d.id) hs on e.salary = hs.salary and d.id = hs.id
+where e.salary = hs.salary and d.id = hs.id";
+                    break;
+                case "MSSQL":
+                    return @"select d.name as Department
+    , e.name Employee
+    , e.Salary
+from Employee e
+	right join Department d on e.departmentid = d.id
+	right join (select d.id, max(e.salary) salary
+                from Employee e
+                    right join Department d on e.departmentid = d.id
+                group by d.id) hs on e.salary = hs.salary and d.id = hs.id
+where e.salary = hs.salary and d.id = hs.id";
+                    break;
+            }
+            return "Fault Language";
+        }
+        /// <summary>
+        /// Problems 185. Department Top Three Salaries
+        /// </summary>
+        public static string Department_Top_Three_Salaries(string Language)
+        {
+            switch (Language)
+            {
+                case "PLSQL":
+                    return @"select d.name as Department
+    , e.name Employee
+    , e.Salary
+from Employee e
+    , Department d
+    , (select rank() over(partition by d.id order by e.Salary desc) rank3, d.id, e.salary
+        from Employee e, Department d
+        where e.departmentid = d.id(+) 
+        group by d.id, e.salary) hs
+where e.departmentid = d.id(+)
+    and e.salary = hs.salary
+    and d.id = hs.id
+    and hs.rank3 <= 3";
+                    break;
+                case "MYSQL":
+                    return @"select d.name as Department
+    , e.name Employee
+    , e.Salary
+from Employee e
+	right join Department d on e.departmentid = d.id
+	right join (select rank() over(partition by d.id order by e.Salary desc) rank3, d.id, e.salary
+                from Employee e
+                    right join Department d on e.departmentid = d.id
+                group by d.id, e.salary) hs on e.salary = hs.salary and d.id = hs.id
+where e.salary = hs.salary 
+    and d.id = hs.id
+    and hs.rank3 <= 3";
+                    break;
+                case "MSSQL":
+                    return @"select d.name as Department
+    , e.name Employee
+    , e.Salary
+from Employee e
+	right join Department d on e.departmentid = d.id
+	right join (select rank() over(partition by d.id order by e.Salary desc) rank3, d.id, e.salary
+                from Employee e
+                    right join Department d on e.departmentid = d.id
+                group by d.id, e.salary) hs on e.salary = hs.salary and d.id = hs.id
+where e.salary = hs.salary 
+    and d.id = hs.id
+    and hs.rank3 <= 3";
+                    break;
+            }
+            return "Fault Language";
+        }
+        /// <summary>
+        /// Problems 196. Delete Duplicate Emails
+        /// </summary>
+        public static string Delete_Duplicate_Emails(string Language)
+        {
+            switch (Language)
+            {
+                case "MYSQL":
+                    return @"delete from person
+where id in (select p.id
+             from (select id, rank() over(partition by email order by id asc) rank2
+                   from person) p
+             where p.rank2 >= 2)";
+                    break;
+            }
+            return "Fault Language";
+        }
+        /// <summary>
+        /// Problems 197. Rising Temperature
+        /// </summary>
+        public static string Rising_Temperature(string Language)
+        {
+            switch (Language)
+            {
+                case "PLSQL":
+                    return @"select id
+from (select id, recordDate, temperature, nvl(lag(temperature) over (order by recordDate asc), 105) ex_temperature
+      from weather
+      order by recordDate asc) w
+where temperature > ex_temperature 
+    and recordDate - 1 in (select recordDate from weather)";
+                    break;
+                case "MYSQL":
+                    return @"select id
+from (select id, recordDate, temperature, ifnull(lag(temperature) over (order by recordDate asc), 105) ex_temperature
+      from weather
+      order by recordDate asc) w
+where temperature > ex_temperature 
+    and date_sub(recordDate, interval 1 day) in (select recordDate from weather)";
+                    break;
+                case "MSSQL":
+                    return @"select id
+from (select top 10000 id, recordDate, temperature, isnull(lag(temperature) over (order by recordDate asc), 105) ex_temperature
+      from weather
+      order by recordDate asc) w
+where temperature > ex_temperature 
+    and dateadd(day, -1, recordDate) in (select recordDate from weather)";
+                    break;
+            }
+            return "Fault Language";
+        }
+        /// <summary>
+        /// Problems 262. Trips and Users
+        /// </summary>
+        public static string Trips_and_Users(string Language)
+        {
+            switch (Language)
+            {
+                case "PLSQL":
+                    return @"select request_at as ""DAY""
+    , round(sum(case status when 'completed' then 0 else 1 end) / count(status), 2) as ""Cancellation Rate""
+from trips t
+    , users c
+    , users d
+where t.client_id = c.users_id(+)
+    and t.driver_id = d.users_id(+)
+    and c.banned = 'No'
+    and d.banned = 'No'
+    and to_date(request_at, 'yyyy-mm-dd') between TO_DATE('2013-10-01', 'yyyy-mm-dd') and TO_DATE('2013-10-03', 'yyyy-mm-dd')
+group by request_at
+order by request_at asc";
+                    break;
+                case "MYSQL":
+                    return @"select request_at as ""DAY""
+    , round(sum(case status when 'completed' then 0 else 1 end) / count(status), 2) as ""Cancellation Rate""
+from trips t
+    right
+join users c on t.client_id = c.users_id
+
+right
+join users d on t.driver_id = d.users_id
+where c.banned = 'No'
+    and d.banned = 'No'
+    and DATE_FORMAT(request_at, '%Y-%m-%d') between DATE_FORMAT('2013-10-01', '%Y-%m-%d') and DATE_FORMAT('2013-10-03', '%Y-%m-%d')
+group by request_at
+order by request_at asc";
+                    break;
+                case "MSSQL":
+                    return @"select request_at as ""DAY""
+    , round(sum(case status when 'completed' then 0.0 else 1.0 end) / count(*), 2) as ""Cancellation Rate""
+from trips t
+    right
+join users c on t.client_id = c.users_id
+
+right
+join users d on t.driver_id = d.users_id
+where c.banned = 'No'
+    and d.banned = 'No'
+    and CONVERT(DATETIME, request_at) between CONVERT(DATETIME, '2013-10-01') and CONVERT(DATETIME, '2013-10-03')
+group by request_at
+order by request_at asc";
+                    break;
+            }
+            return "Fault Language";
+        }
+        /// <summary>
+        /// Problems 
+        /// </summary>
+        public static string A(string Language)
+        {
+            switch (Language)
+            {
+                case "PLSQL":
                     return @"";
                     break;
                 case "MYSQL":

@@ -15,12 +15,12 @@ namespace LeetCode
         /// </summary>
         public static int[] TwoSum(int[] nums, int target)
         {
-            int[] answer = new int[2];
             for (int i1 = 0; i1 < nums.Length - 1; i1++)
             {
+                if (target < nums[i1]) continue;
                 for (int i2 = i1 + 1; i2 < nums.Length; i2++)
                 {
-                    if (nums[i1] + nums[i2] == target)
+                    if (target - nums[i1] == nums[i2])
                         return new int[] { i1, i2 };
                 }
             }
@@ -1111,20 +1111,186 @@ order by request_at asc";
             return "Fault Language";
         }
         /// <summary>
-        /// Problems 
+        /// Problems 595. Big Countries
         /// </summary>
-        public static string A(string Language)
+        public static string Big_Countries(string Language)
         {
             switch (Language)
             {
                 case "PLSQL":
-                    return @"";
+                    return @"select name, population, area
+from world
+where population >= 25000000 
+    or area >= 3000000";
                     break;
                 case "MYSQL":
-                    return @"";
+                    return @"select name, population, area
+from world
+where population >= 25000000 
+    or area >= 3000000";
                     break;
                 case "MSSQL":
-                    return @"";
+                    return @"select name, population, area
+from world
+where population >= 25000000 
+    or area >= 3000000";
+                    break;
+            }
+            return "Fault Language";
+        }
+        /// <summary>
+        /// Problems 596. Classes More Than 5 Students
+        /// </summary>
+        public static string Classes_More_Than_5_Students(string Language)
+        {
+            switch (Language)
+            {
+                case "PLSQL":
+                    return @"select class
+from courses
+group by class
+having count(distinct student) >= 5";
+                    break;
+                case "MYSQL":
+                    return @"select class
+from courses
+group by class
+having count(distinct student) >= 5";
+                    break;
+                case "MSSQL":
+                    return @"select class
+from courses
+group by class
+having count(distinct student) >= 5";
+                    break;
+            }
+            return "Fault Language";
+        }
+        /// <summary>
+        /// Problems 601. Human Traffic of Stadium
+        /// </summary>
+        public static string Human_Traffic_of_Stadium(string Language)
+        {
+            switch (Language)
+            {
+                case "PLSQL"://不能submit
+                    return @"/* Write your PL/SQL query statement below */
+select id
+    , visit_date
+    , people
+from (select s.*
+        , lag(people) over(order by id asc) lag_people
+        , lag(people, 2) over(order by id asc) lag2_people
+        , lead(people) over(order by id asc) lead_people
+        , lead(people, 2) over(order by id asc) lead2_people
+    from Stadium s) s
+where s.people >= 100
+    AND ((lag_people >= 100 AND lag2_people >= 100)
+    OR (lag_people >= 100 AND lead_people >= 100)
+    OR (lead_people >= 100 AND lead2_people >= 100))
+order by id asc";
+                    break;
+                case "MYSQL":
+                    return @"/* Write your PL/SQL query statement below */
+select id
+    , visit_date
+    , people
+from (select s.*
+        , lag(people) over(order by id asc) lag_people
+        , lag(people, 2) over(order by id asc) lag2_people
+        , lead(people) over(order by id asc) lead_people
+        , lead(people, 2) over(order by id asc) lead2_people
+    from Stadium s) s
+where s.people >= 100
+    AND ((lag_people >= 100 AND lag2_people >= 100)
+    OR (lag_people >= 100 AND lead_people >= 100)
+    OR (lead_people >= 100 AND lead2_people >= 100))
+order by id asc";
+                    break;
+                case "MSSQL":
+                    return @"/* Write your PL/SQL query statement below */
+select id
+    , visit_date
+    , people
+from (select s.*
+        , lag(people) over(order by id asc) lag_people
+        , lag(people, 2) over(order by id asc) lag2_people
+        , lead(people) over(order by id asc) lead_people
+        , lead(people, 2) over(order by id asc) lead2_people
+    from Stadium s) s
+where s.people >= 100
+    AND ((lag_people >= 100 AND lag2_people >= 100)
+    OR (lag_people >= 100 AND lead_people >= 100)
+    OR (lead_people >= 100 AND lead2_people >= 100))
+order by id asc";
+                    break;
+            }
+            return "Fault Language";
+        }
+        /// <summary>
+        /// Problems 620. Not Boring Movies
+        /// </summary>
+        public static string Not_Boring_Movies(string Language)
+        {
+            switch (Language)
+            {
+                case "PLSQL":
+                    return @"select *
+from Cinema
+where description != 'boring'
+    and mod(id, 2) = 1
+order by rating desc";
+                    break;
+                case "MYSQL":
+                    return @"select *
+from Cinema
+where description != 'boring'
+    and mod(id, 2) = 1
+order by rating desc";
+                    break;
+                case "MSSQL":
+                    return @"select *
+from Cinema
+where description != 'boring'
+    and id % 2 = 1
+order by rating desc";
+                    break;
+            }
+            return "Fault Language";
+        }
+        /// <summary>
+        /// Problems 626. Exchange Seats
+        /// </summary>
+        public static string Exchange_Seats(string Language)
+        {
+            switch (Language)
+            {
+                case "PLSQL":
+                    return @"select case when s.after_id > m.id then s.id else s.after_id end id
+    , s.student
+from (select s.*
+        , case when mod(id, 2) = 0 then id - 1 else id + 1 end after_id
+    from seat s) s
+    , (select max(id) id from seat) m
+order by s.after_id asc";
+                    break;
+                case "MYSQL":
+                    return @"select case when s.after_id > m.id then s.id else s.after_id end id
+    , s.student
+from (select s.*
+        , case when mod(id, 2) = 0 then id - 1 else id + 1 end after_id
+    from seat s) s
+    , (select max(id) id from seat) m
+order by s.after_id asc";
+                    break;
+                case "MSSQL":
+                    return @"select case when s.after_id > m.id then s.id else s.after_id end id
+    , s.student
+from (select s.*
+        , case when id % 2 = 0 then id - 1 else id + 1 end after_id
+    from seat s) s
+    , (select max(id) id from seat) m
+order by s.after_id asc";
                     break;
             }
             return "Fault Language";

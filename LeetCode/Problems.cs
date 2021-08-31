@@ -10,6 +10,30 @@ namespace LeetCode
 {
     public class Problems
     {
+        //Definition
+        public class ListNode 
+        {
+            public int val;
+            public ListNode next;
+            public ListNode(int val = 0, ListNode next = null)
+            {
+                this.val = val;
+                this.next = next;
+            }
+        }
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+        // Topic: Algorithms
         /// <summary>
         /// Problems 1
         /// </summary>
@@ -30,16 +54,6 @@ namespace LeetCode
         /// <summary>
         /// Problems 2
         /// </summary>
-        public class ListNode //Definition
-        {
-            public int val;
-            public ListNode next;
-            public ListNode(int val = 0, ListNode next = null)
-            {
-                this.val = val;
-                this.next = next;
-            }
-        }
         public static ListNode AddTwoNumbers(ListNode l1, ListNode l2) //topic
         {
             // 把下一位數塞進next形成巢狀結構
@@ -423,18 +437,6 @@ namespace LeetCode
         /// <summary>
         /// Problems 94. Binary Tree Inorder Traversal
         /// </summary>
-        public class TreeNode
-        {
-            public int val;
-            public TreeNode left;
-            public TreeNode right;
-            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
-            {
-                this.val = val;
-                this.left = left;
-                this.right = right;
-            }
-        }
         public static IList<int> InorderTraversal(TreeNode root)
         {
             //Left>Mid>Rigft
@@ -620,6 +622,7 @@ namespace LeetCode
             return Largest;
         }
 
+        // Topic: Database
         /// <summary>
         /// Problems 175. Combine Two Tables
         /// </summary>
@@ -1291,6 +1294,90 @@ from (select s.*
     from seat s) s
     , (select max(id) id from seat) m
 order by s.after_id asc";
+                    break;
+            }
+            return "Fault Language";
+        }
+        /// <summary>
+        /// Problems 627. Swap Salary
+        /// </summary>
+        public static string Swap_Salary(string Language)
+        {
+            switch (Language)
+            {
+                case "PLSQL":
+                    return @"update salary
+set sex = decode(sex, 'm', 'f'
+                    , 'f', 'm')";
+                    break;
+                case "MYSQL":
+                    return @"update salary
+set sex = case sex when 'm' then 'f' when 'f' then 'm' end";
+                    break;
+                case "MSSQL":
+                    return @"update salary
+set sex = case sex when 'm' then 'f' when 'f' then 'm' end";
+                    break;
+            }
+            return "Fault Language";
+        }
+        /// <summary>
+        /// Problems 1179. Reformat Department Table
+        /// </summary>
+        public static string Reformat_Department_Table(string Language)
+        {
+            switch (Language)
+            {
+                case "PLSQL":
+                    return @"select id
+    , sum(case month when 'Jan' then revenue end) Jan_Revenue
+    , sum(case month when 'Feb' then revenue end) Feb_Revenue
+    , sum(case month when 'Mar' then revenue end) Mar_Revenue
+    , sum(case when month = 'Apr' then revenue end) Apr_Revenue
+    , sum(case when month = 'May' then revenue end) May_Revenue
+    , sum(case when month = 'Jun' then revenue end) Jun_Revenue
+    , sum(case when month = 'Jul' then revenue end) Jul_Revenue
+    , sum(case when month = 'Aug' then revenue end) Aug_Revenue
+    , sum(case when month = 'Sep' then revenue end) Sep_Revenue
+    , sum(case when month = 'Oct' then revenue end) Oct_Revenue
+    , sum(case when month = 'Nov' then revenue end) Nov_Revenue
+    , sum(case when month = 'Dec' then revenue end) Dec_Revenue
+from department
+group by id";
+                    break;
+                case "MYSQL":
+                    return @"select id
+    , sum(case month when 'Jan' then revenue end) Jan_Revenue
+    , sum(case month when 'Feb' then revenue end) Feb_Revenue
+    , sum(case month when 'Mar' then revenue end) Mar_Revenue
+    , sum(case when month = 'Apr' then revenue end) Apr_Revenue
+    , sum(case when month = 'May' then revenue end) May_Revenue
+    , sum(case when month = 'Jun' then revenue end) Jun_Revenue
+    , sum(case when month = 'Jul' then revenue end) Jul_Revenue
+    , sum(case when month = 'Aug' then revenue end) Aug_Revenue
+    , sum(case when month = 'Sep' then revenue end) Sep_Revenue
+    , sum(case when month = 'Oct' then revenue end) Oct_Revenue
+    , sum(case when month = 'Nov' then revenue end) Nov_Revenue
+    , sum(case when month = 'Dec' then revenue end) Dec_Revenue
+from department
+group by id";
+                    break;
+                case "MSSQL":
+                    return @"select id
+    , sum(case month when 'Jan' then revenue end) Jan_Revenue
+    , sum(case month when 'Feb' then revenue end) Feb_Revenue
+    , sum(case month when 'Mar' then revenue end) Mar_Revenue
+    , sum(case when month = 'Apr' then revenue end) Apr_Revenue
+    , sum(case when month = 'May' then revenue end) May_Revenue
+    , sum(case when month = 'Jun' then revenue end) Jun_Revenue
+    , sum(case when month = 'Jul' then revenue end) Jul_Revenue
+    , sum(case when month = 'Aug' then revenue end) Aug_Revenue
+    , sum(case when month = 'Sep' then revenue end) Sep_Revenue
+    , sum(case when month = 'Oct' then revenue end) Oct_Revenue
+    , sum(case when month = 'Nov' then revenue end) Nov_Revenue
+    , sum(case when month = 'Dec' then revenue end) Dec_Revenue
+from department
+group by id";
                     break;
             }
             return "Fault Language";

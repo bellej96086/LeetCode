@@ -25,7 +25,12 @@ namespace LeetCode
             //Console.WriteLine(Problems.AddBinary("11", "1"));
             //Console.WriteLine(Problems.MySqrt(5));
             //Console.WriteLine(Problems.ClimbStairs(35));
-            IsSameTree();
+            //IsSameTree();
+            Console.WriteLine(Problems.MyAtoi("-2147483648"));
+
+
+
+
         }
 
         private void MergeTwoLists() // Ex.21

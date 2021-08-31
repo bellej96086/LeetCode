@@ -541,7 +541,30 @@ namespace LeetCode
             }
             return true;
         }
-
+        /// <summary>
+        /// Problems 8. String to Integer (atoi)
+        /// </summary>
+        public static int MyAtoi(string s)
+        {
+            s = s.Trim();
+            if (string.IsNullOrWhiteSpace(s)) return 0;
+            int sign = 1, index = 0;
+            if (s[index] == '+' || s[index] == '-')
+            {
+                sign = s[index] == '-' ? -1 : 1;
+                index++;
+            }
+            long result = 0;
+            while (index < s.Length)
+            {
+                if (!char.IsNumber(s[index])) break;
+                result = result * 10 + int.Parse(s[index].ToString());
+                if (result * sign <= Int32.MinValue) return Int32.MinValue;
+                if (result * sign >= Int32.MaxValue) return Int32.MaxValue;
+                index++;
+            }
+            return (int)result * sign;
+        }
 
         /// <summary>
         /// Problems 
@@ -976,7 +999,6 @@ where e.departmentid = d.id(+)
     and e.salary = hs.salary
     and d.id = hs.id
     and hs.rank3 <= 3";
-                    break;
                 case "MYSQL":
                     return @"select d.name as Department
     , e.name Employee
@@ -990,7 +1012,6 @@ from Employee e
 where e.salary = hs.salary 
     and d.id = hs.id
     and hs.rank3 <= 3";
-                    break;
                 case "MSSQL":
                     return @"select d.name as Department
     , e.name Employee
@@ -1004,7 +1025,6 @@ from Employee e
 where e.salary = hs.salary 
     and d.id = hs.id
     and hs.rank3 <= 3";
-                    break;
             }
             return "Fault Language";
         }
@@ -1153,19 +1173,16 @@ where population >= 25000000
 from courses
 group by class
 having count(distinct student) >= 5";
-                    break;
                 case "MYSQL":
                     return @"select class
 from courses
 group by class
 having count(distinct student) >= 5";
-                    break;
                 case "MSSQL":
                     return @"select class
 from courses
 group by class
 having count(distinct student) >= 5";
-                    break;
             }
             return "Fault Language";
         }

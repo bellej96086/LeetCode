@@ -26,7 +26,7 @@ namespace LeetCode
             //Console.WriteLine(Problems.MySqrt(5));
             //Console.WriteLine(Problems.ClimbStairs(35));
             //IsSameTree();
-            Console.WriteLine(Problems.MyAtoi("-2147483648"));
+            Console.WriteLine(Problems.Compress(new char[] { 'a', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b' }));
 
 
 

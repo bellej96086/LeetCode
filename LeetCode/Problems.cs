@@ -565,6 +565,105 @@ namespace LeetCode
             }
             return (int)result * sign;
         }
+        /// <summary>
+        /// Problems 65. Valid Number
+        /// </summary>
+        public static bool IsNumber(string s)
+        {
+            // 's' must consist of values in [a-z A-Z .-+ 0-9] only
+            /*
+            Regex error = new Regex("[a-df-zA-DF-Z]");
+            if (error.IsMatch(s)) return false;
+
+            Regex number = new Regex("^(\\+|-)?(\\d+(\\.\\d+)?|\\.\\d+|\\d+\\.|\\d+(\\.\\d+)?(E|e)(\\+|-)?\\d+|\\.\\d+?(E|e)(\\+|-)?\\d+|\\d+\\.(E|e)(\\+|-)?\\d+)$");
+            if (number.IsMatch(s)) return true;
+            else return false;
+            */
+            return Regex.IsMatch(s, @"^(\+|-)?(\d+(\.\d+)?|\.\d+|\d+\.)((E|e)(\+|-)?\d+)?$");
+        }
+        /// <summary>
+        /// Problems 168. Excel Sheet Column Title
+        /// </summary>
+        public static string ConvertToTitle(int columnNumber)
+        {
+            string res = "";
+            int mod = 0;
+            while (columnNumber > 0)
+            {
+                mod = columnNumber % 26 == 0 ? 26 : columnNumber % 26;
+                columnNumber = columnNumber - mod;
+                res = ColumnNumber(mod) + res;
+                columnNumber = columnNumber / 26;                
+            }
+            return res;
+        }
+        private static string ColumnNumber(int Number)
+        {
+            return ((char)(64 + Number)).ToString();
+        }
+        /// <summary>
+        /// Problems 171. Excel Sheet Column Number
+        /// </summary>
+        public static int TitleToNumber(string columnTitle)
+        {
+            int res = 0;
+            foreach (char column in columnTitle)
+            {
+                res = res * 26 + ColumnName(column);
+            }
+            return res;
+        }
+        private static int ColumnName(char name)
+        {
+            return ((int)name - 64);
+        }
+        /// <summary>
+        /// Problems 38. Count and Say
+        /// </summary>
+        public static string CountAndSay(int n)
+        {
+            string res = "1";
+            if (n == 1) return res;
+            do
+            {
+                string before_res = res;
+                res = "";
+                int time = 1;
+                for (int i = 0; i < before_res.Length; i++)
+                {
+                    if (i != before_res.Length - 1 && before_res[i + 1] == before_res[i])
+                        time++;
+                    else
+                    {
+                        res += time.ToString() + before_res[i];
+                        time = 1;
+                    }
+                }
+            } while (--n > 1);
+            return res;
+        }
+        /// <summary>
+        /// Problems 443. String Compression
+        /// </summary>
+        public static int Compress(char[] chars)
+        {
+            int pos_chars = 0, pos_push = 0;
+            for (int i = 1; i <= chars.Length; i++)
+            {
+                if (i == chars.Length || chars[i - 1] != chars[i])
+                {
+                    chars[pos_push++] = chars[i - 1];
+                    if ((i - pos_chars) != 1)
+                    {
+                        char[] temps = (i - pos_chars).ToString().ToCharArray();
+                        foreach (char temp in temps) { chars[pos_push++] = temp; }
+                    }
+                    pos_chars = i;
+                }
+            }
+            return pos_push;
+        }
+
 
         /// <summary>
         /// Problems 

@@ -172,7 +172,7 @@ namespace LeetCode
              */
             if (s.Length % 2 == 1) return false;
             Dictionary<char, char> Parentheses = new Dictionary<char, char>()
-            { { ')', '(' }, { ']', '[' }, { '}', '{' } };
+            { { ')', '(' }, { ']', '[' }, { '}', '{' } }; //字典
             Stack stack = new Stack();
             foreach(char c in s)
             {
@@ -663,6 +663,85 @@ namespace LeetCode
             }
             return pos_push;
         }
+        /// <summary>
+        /// Problems 1415. The k-th Lexicographical String of All Happy Strings of Length n
+        /// </summary>
+        public static string GetHappyString(int n, int k)
+        {
+            //Math.Pow(2, 10); 2^10
+            //Math.Log(k, 2);  2^x=10，求幕次
+            //(int)Math.Ceiling(Math.Log(k, 2)); >=最小整數值
+            //(int)Math.Floor(Math.Log(k, 2)); <=最大整數值
+            if (k > 3 * Math.Pow(2, (n - 1))) return "";
+            else if (n == 1) return ABC_not_equal(k - 1);
+            k--;
+
+            string res = "";
+            int carry = (int)Math.Pow(2, n - 1);
+            res = ABC_not_equal(k / carry);
+            k = k - k / carry * carry;
+            while (res.Length < n)
+            {
+                carry = carry / 2;
+                res += ABC_not_equal(k / carry, res[res.Length - 1]);
+                k = k - k / carry * carry;
+            }
+
+            /*
+            Stack<int> res_number = new Stack<int>();
+            do
+            {
+                res_number.Push(res_number.Count + 1 < n ? k % 2 : k % 3);
+                k = (k - res_number.Peek()) / 2;
+            } while (res_number.Count < n);
+            do
+            {
+                if (res == "") res = ABC_not_equal(res_number.Pop());
+                else res += ABC_not_equal(res_number.Pop(), res[res.Length - 1]);
+            } while (res_number.Count > 0);
+            */
+            return res;
+        }
+        private static string ABC_not_equal(int plus, char repeat = new char())
+        {
+            char[] letters = new char[] { 'a', 'b', 'c' };
+            List<char> letter_list = new List<char>();
+            letter_list.AddRange(letters);
+            letter_list.Remove(repeat);
+            return letter_list[plus].ToString();
+        }
+        /// <summary>
+        /// Problems 1032. Stream of Characters
+        /// </summary>
+        public class StreamChecker
+        {
+            private string[] Check_Words;
+            private int Check_Word_Max_Length = 0;
+            private string Stream_Word = "";
+            public StreamChecker(string[] words)
+            {
+                Check_Words = words;                
+                foreach (string word in words)
+                {
+                    Check_Word_Max_Length = Check_Word_Max_Length < word.Length ? word.Length : Check_Word_Max_Length;
+                }
+            }
+
+            public bool Query(char letter)
+            {
+                Stream_Word += letter;
+                Stream_Word = Stream_Word.Length > Check_Word_Max_Length ? Stream_Word.Substring(Stream_Word.Length - 1 - Check_Word_Max_Length) : Stream_Word;
+                foreach (string word in Check_Words)
+                {
+                    if (word.Length > Stream_Word.Length) continue;
+                    if (word == Stream_Word.Substring(Stream_Word.Length - word.Length)) return true;
+                }
+                return false;
+            }
+        }
+
+
+
 
 
         /// <summary>

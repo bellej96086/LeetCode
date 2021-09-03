@@ -720,7 +720,7 @@ namespace LeetCode
             private string Stream_Word = "";
             public StreamChecker(string[] words)
             {
-                Check_Words = words;                
+                Check_Words = words;
                 foreach (string word in words)
                 {
                     Check_Word_Max_Length = Check_Word_Max_Length < word.Length ? word.Length : Check_Word_Max_Length;
@@ -739,7 +739,126 @@ namespace LeetCode
                 return false;
             }
         }
+        /// <summary>
+        /// Problems 1832. Check if the Sentence Is Pangram
+        /// </summary>
+        public static bool CheckIfPangram(string sentence)
+        {
+            //if (sentence.Length < 26) return false; // 沒有變快
+            HashSet<char> letters = new HashSet<char>();
+            int count = 0;
+            foreach (char letter in sentence)
+            {
+                if (letters.Contains(letter)) continue;
+                letters.Add(letter);
+                count++;
+                if (count == 26) return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// Problems 1003. Check If Word Is Valid After Substitutions
+        /// </summary>
+        public static bool IsValid_1003(string s)
+        {
+            string t = "abc";
+            while (s.Contains(t))
+            {
+                s = s.Replace(t, "");
+            }
+            return s.Length == 0 ? true : false;
+        }
+        /// <summary>
+        /// Problems 1604. Alert Using Same Key-Card Three or More Times in a One Hour Period
+        /// </summary>
+        public static IList<string> AlertNames(string[] keyName, string[] keyTime)
+        {
+            Dictionary<string, List<int>> record = new Dictionary<string, List<int>>();
+            for (int i = 0; i < keyName.Length; i++)
+            {
+                if (!record.ContainsKey(keyName[i])) record.Add(keyName[i], new List<int>());
+                record[keyName[i]].Add(Convert.ToInt32(keyTime[i].Substring(0, 2)) * 60 + Convert.ToInt32(keyTime[i].Substring(3, 2))); // minute
+            }
+            List<string> names = new List<string>();
+            foreach (string name in record.Keys)
+            {
+                List<int> times = record[name];
+                if (times.Count < 3) continue;
+                times.Sort();
+                for (int i = 0; i + 2 < times.Count; i++)
+                {
+                    if (times[i+2] - times[i] <= 60)
+                    {
+                        names.Add(name);
+                        break;
+                    }
+                }
+            }
+            names.Sort();
+            return names;
+        }
+        /// <summary>
+        /// Problems 1299. Replace Elements with Greatest Element on Right Side
+        /// </summary>
+        public static int[] ReplaceElements(int[] arr)
+        {
+            //O(n^2)
+            //for (int i = 0; i < arr.Length; i++)
+            //{
+            //    arr[i] = -1;
+            //    for (int j = i + 1; j < arr.Length; j++)
+            //    {
+            //        arr[i] =  arr[i] < arr[j] ? arr[j] : arr[i];
+            //    }
+            //}
 
+            //O(n - 1)
+            int current_max = 0;
+            for (int i = arr.Length - 1; i >= 0; i--)
+            {
+                int before_max = current_max;
+                current_max = (current_max > arr[i]) ? current_max : arr[i];
+                arr[i] = (i == arr.Length - 1) ? -1 : before_max;
+            }
+            return arr;
+        }
+        /// <summary>
+        /// Problems 283. Move Zeroes
+        /// </summary>
+        public static void MoveZeroes(int[] nums)
+        {
+            int n_point = 0, temp;
+            for (int i = 0; i < nums.Length; i++)
+            {
+                if (nums[i] == 0) continue;
+                temp = nums[n_point];
+                nums[n_point] = nums[i];
+                nums[i] = temp;
+                n_point++;
+            }
+        }
+        /// <summary>
+        /// Problems 905. Sort Array By Parity
+        /// </summary>
+        public static int[] SortArrayByParity(int[] nums)
+        {
+            int point = 0, temp;
+            for (int i = 0; i < nums.Length; i++)
+            {
+                if (nums[i] % 2 == 0)
+                {
+                    temp = nums[i];
+                    //nums[i] = nums[nums.Length - point - 1];
+                    //nums[nums.Length - point - 1] = temp;
+
+                    nums[i] = nums[point];
+                    nums[point] = temp;
+
+                    point++;
+                }
+            }
+            return nums;
+        }
 
 
 

@@ -26,20 +26,23 @@ namespace LeetCode
             //Console.WriteLine(Problems.MySqrt(5));
             //Console.WriteLine(Problems.ClimbStairs(35));
             //IsSameTree();
-            //Console.WriteLine(Problems.GetHappyString(7, 64));
-            Problems.StreamChecker streamChecker = new Problems.StreamChecker(new string[] { "cd", "f", "kl" });
-            streamChecker.Query('a'); // return False
-            streamChecker.Query('b'); // return False
-            streamChecker.Query('c'); // return False
-            streamChecker.Query('d'); // return True, because 'cd' is in the wordlist
-            streamChecker.Query('e'); // return False
-            streamChecker.Query('f'); // return True, because 'f' is in the wordlist
-            streamChecker.Query('g'); // return False
-            streamChecker.Query('h'); // return False
-            streamChecker.Query('i'); // return False
-            streamChecker.Query('j'); // return False
-            streamChecker.Query('k'); // return False
-            streamChecker.Query('l'); // return True, because 'kl' is in the wordlist
+            string[] keyName = { "daniel", "daniel", "daniel", "luis", "luis", "luis", "luis" }
+            , keyTime = { "10:00", "10:40", "11:00", "09:00", "11:00", "13:00", "15:00" };
+            Console.WriteLine(Problems.SortArrayByParity(new int[] { 3,1,2,4 }));
+            //Problems.MoveZeroes(new int[] { 1, 0, 0, 3, 12 });
+            //Problems.StreamChecker streamChecker = new Problems.StreamChecker(new string[] { "cd", "f", "kl" });
+            //streamChecker.Query('a'); // return False
+            //streamChecker.Query('b'); // return False
+            //streamChecker.Query('c'); // return False
+            //streamChecker.Query('d'); // return True, because 'cd' is in the wordlist
+            //streamChecker.Query('e'); // return False
+            //streamChecker.Query('f'); // return True, because 'f' is in the wordlist
+            //streamChecker.Query('g'); // return False
+            //streamChecker.Query('h'); // return False
+            //streamChecker.Query('i'); // return False
+            //streamChecker.Query('j'); // return False
+            //streamChecker.Query('k'); // return False
+            //streamChecker.Query('l'); // return True, because 'kl' is in the wordlist
 
 
 

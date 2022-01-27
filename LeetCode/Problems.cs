@@ -859,7 +859,39 @@ namespace LeetCode
             }
             return nums;
         }
+        /// <summary>
+        /// Problems 421. Maximum XOR of Two Numbers in an Array
+        /// </summary>
+        public static int FindMaximumXOR(int[] nums)
+        {
+            int mask = 0, currMax = 0;
+            // 從最大~最小位數，取可能最大值，確認現在最大值
+            for (int currDigits = Convert.ToString(nums.Max(), 2).Length; currDigits >= 0; currDigits--) 
+            // 最大~最小位數，int:range=2^32,value=-2^31~+2^31-1
+            {
+                mask = mask | (1 << currDigits); // 上次的mask+這次的位數，100>110>111
 
+                // 找出所有當前mask的對應可能(像trie)
+                HashSet<int> currSet = new HashSet<int>(); 
+                foreach (int num in nums)
+                {
+                    currSet.Add(mask & num);
+                }
+                if (currSet.Count == 1) continue; // 沒有對應的位數
+
+                // 找出當前期望最大值是否存在
+                int currWish = currMax | (1 << currDigits); // 上次最大值+這位數=現在期望最大值
+                foreach (int currNum in currSet)
+                {
+                    if (currSet.Contains(currNum ^ currWish)) // 到目前為止的位數有互補(可以XOR)
+                    {
+                        currMax = currWish; // 現在期望最大值
+                        break;
+                    }
+                }
+            }
+            return currMax;
+        }
 
 
 

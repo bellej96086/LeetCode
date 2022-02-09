@@ -26,9 +26,9 @@ namespace LeetCode
             //Console.WriteLine(Problems.MySqrt(5));
             //Console.WriteLine(Problems.ClimbStairs(35));
             //IsSameTree();
-            string[] keyName = { "daniel", "daniel", "daniel", "luis", "luis", "luis", "luis" }
-            , keyTime = { "10:00", "10:40", "11:00", "09:00", "11:00", "13:00", "15:00" };
-            Console.WriteLine(Problems.SortArrayByParity(new int[] { 3,1,2,4 }));
+            //string[] keyName = { "daniel", "daniel", "daniel", "luis", "luis", "luis", "luis" }
+            //, keyTime = { "10:00", "10:40", "11:00", "09:00", "11:00", "13:00", "15:00" };
+            //Console.WriteLine(Problems.SortArrayByParity(new int[] { 3,1,2,4 }));
             //Problems.MoveZeroes(new int[] { 1, 0, 0, 3, 12 });
             //Problems.StreamChecker streamChecker = new Problems.StreamChecker(new string[] { "cd", "f", "kl" });
             //streamChecker.Query('a'); // return False
@@ -44,9 +44,12 @@ namespace LeetCode
             //streamChecker.Query('k'); // return False
             //streamChecker.Query('l'); // return True, because 'kl' is in the wordlist
 
-
-
-
+            int[] nums = new int[] { 1,3,5,6 },
+                  nums2 = new int[] { 1 };
+            Console.WriteLine(Study_Plan_Algorithm.SearchInsert(nums, 5));
+            Console.WriteLine(Study_Plan_Algorithm.SearchInsert(nums, 2));
+            Console.WriteLine(Study_Plan_Algorithm.SearchInsert(nums, 7));
+            //Console.WriteLine(Study_Plan_Data_Structure.Merge(nums, 0 , nums2, 1));
 
         }
 

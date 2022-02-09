@@ -35,23 +35,6 @@ namespace LeetCode
         }
         // Topic: Algorithms
         /// <summary>
-        /// Problems 1
-        /// </summary>
-        public static int[] TwoSum(int[] nums, int target)
-        {
-            for (int i1 = 0; i1 < nums.Length - 1; i1++)
-            {
-                if (target < nums[i1]) continue;
-                for (int i2 = i1 + 1; i2 < nums.Length; i2++)
-                {
-                    if (target - nums[i1] == nums[i2])
-                        return new int[] { i1, i2 };
-                }
-            }
-            return new int[] { 0, 0 };
-            //throw new IllegalArgumentException("No two sum solution");             
-        }
-        /// <summary>
         /// Problems 2
         /// </summary>
         public static ListNode AddTwoNumbers(ListNode l1, ListNode l2) //topic
@@ -269,38 +252,6 @@ namespace LeetCode
                         return i1;
             }
             return -1;
-        }
-        /// <summary>
-        /// Problems 35.Search Insert Position
-        /// </summary>
-        public static int SearchInsert(int[] nums, int target)
-        {
-            int minlimit = 0, maxlimit = nums.Length - 1, index = 0;            
-            while (true)
-            {
-                index = (minlimit + maxlimit) / 2;
-                if (nums[index] == target) return index;
-                else if (index == maxlimit && nums[maxlimit] > target && nums[minlimit] > target) return index;
-                else if ((index == minlimit && nums[minlimit] < target && nums[maxlimit] >= target) || (index == maxlimit && nums[maxlimit] < target)) return index + 1;
-                else if ((index == minlimit && nums[minlimit] > target) || (index == maxlimit && nums[maxlimit] > target)) return index;
-                else if (index == minlimit && nums[minlimit] < target && nums[maxlimit] < target) return index + 2;
-                else if (nums[index] > target) maxlimit = index;
-                else if (nums[index] < target) minlimit = index;
-            }
-        }
-        /// <summary>
-        /// Problems 53.Maximum Subarray
-        /// </summary>
-        public static int MaxSubArray(int[] nums)
-        {
-            int result = nums[0], min = nums[0], subtotal = nums[0];
-            for (int i = 1; i < nums.Length; i++)
-            {
-                subtotal += nums[i];
-                result = Math.Max(subtotal, Math.Max(subtotal - min, result));
-                min = Math.Min(min, subtotal);
-            }
-            return result;
         }
         /// <summary>
         /// Problems 58. Length of Last Word
@@ -892,7 +843,128 @@ namespace LeetCode
             }
             return currMax;
         }
+        /// <summary>
+        /// Problems 211. Design Add and Search Words Data Structure
+        /// </summary>
+        public class WordDictionary
+        {
+            // 359ms, 59.6MB
+            private Dictionary<int, HashSet<string>> dicWord = new Dictionary<int,HashSet<string>>();
+            public void AddWord(string word)
+            {
+                if (dicWord.TryGetValue(word.Length, out HashSet<string> setWord))
+                    setWord.Add(word);
+                else
+                {
+                    setWord = new HashSet<string>();
+                    setWord.Add(word);
+                    dicWord.Add(word.Length, setWord);
+                }
+            }
+            public bool Search(string word)
+            {
+                if (dicWord.TryGetValue(word.Length, out HashSet<string> setWord) == null)
+                    return false;
 
+                foreach (string currWord in setWord)
+                {
+                    for (int pos = 0; pos < word.Length; pos++)
+                    {
+                        if (word[pos] != '.' && word[pos] != currWord[pos]) break;
+                        else if (pos == word.Length - 1) return true;
+                    }
+                }
+                return false;
+            }            
+            // 244ms, 66.4MB
+            /*
+            private class WordNode
+            {
+                public WordNode[] next { get; } = new WordNode[26]; // A-Z
+                public bool isWord { get; set; } // Right word end
+            }
+
+            private readonly WordNode root = new WordNode();
+            public void AddWord(string word)
+            {
+                // 遍歷(加總,每個),最後一個.isLetter = true
+                word.Aggregate(root, (node, letter) =>
+                node.next[letter - 'a'] = node.next[letter - 'a'] == null ? new WordNode() : node.next[letter - 'a']).isWord = true;
+            }
+            public bool Search(string word)
+            {
+                return reSearch(word, 0, root); // 尋找WordNode
+            }
+            private bool reSearch(string word, int index, WordNode node)
+            {
+                if (word.Length == index) return node.isWord; // 長度正確
+
+                return word[index] == '.' // any or not
+                    ? node.next.Where(n => n != null).Any(n => reSearch(word, index + 1, n)) // 遍歷所有可能的WordNode
+                    : node.next[word[index] - 'a'] != null && reSearch(word, index + 1, node.next[word[index] - 'a']); // 尋找下一個WordNode
+            }
+            */
+        }
+        /// <summary>
+        /// Problems 258. Add Digits
+        /// </summary>
+        public static int AddDigits(int num)
+        {
+            // 迴圈
+            //do { num = num.ToString().ToArray().Sum(letter => int.Parse(letter.ToString())); }
+            //while (num > 9);
+            //return num;
+
+            // 數根(Digital root):所有位數相加直到剩下個位數,超過10就在繼續相加,也就是num%9
+            // num>10,num%9>0,return num%9
+            //             =0,return 9
+            // num<10,return num
+            return num == 0 ? 0 : num % 9 == 0 ? 9 : num % 9;
+        }
+        /// <summary>
+        /// Problems 532. K-diff Pairs in an Array
+        /// </summary>
+        public static int FindPairs(int[] nums, int k)
+        {
+            if (nums.Length == 1) return 0;
+
+            int count = 0; // k-pair
+            if (k == 0)
+            {
+                Array.Sort(nums);
+                bool same = false;
+                for(int i = 1; i < nums.Length; i++)
+                {
+                    if (nums[i] == nums[i - 1])
+                    {
+                        if (same) continue;
+                        count++;
+                        same = true;
+                    }
+                    else same = false;
+                }
+
+                //Dictionary<int, int> numDic = new Dictionary<int, int>();// 已有的num
+                //foreach (int num in nums)
+                //{
+                //    if (numDic.ContainsKey(num)) numDic[num]++;
+                //    else numDic.Add(num, 1);
+                //}
+                //foreach (int i in numDic.Values)
+                //{
+                //    if (i >= 2) count++;
+                //}
+            }
+            else
+            {
+                HashSet<int> numSet = new HashSet<int>(nums);// num of unique 
+                foreach (int num in numSet)
+                {
+                    if (numSet.Contains(num + k)) count++;
+                }                
+            }
+            return count;
+        }
 
 
         /// <summary>

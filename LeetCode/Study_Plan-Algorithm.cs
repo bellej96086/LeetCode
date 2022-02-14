@@ -74,5 +74,41 @@ namespace LeetCode
             }
             return maxlimit;
         }
+
+        /// <summary>
+        /// Problems 977. Squares of a Sorted Array
+        /// </summary>
+        public static int[] SortedSquares(int[] nums)
+        {
+            for (int i = 0; i < nums.Length; i++)
+            {
+                nums[i] = (int)Math.Pow(nums[i], 2);
+            }
+            Array.Sort(nums);
+            return nums;
+        }
+        /// <summary>
+        /// Problems 189. Rotate Array
+        /// </summary>
+        public static void Rotate(int[] nums, int k)
+        {
+            k %= nums.Length;
+            if (k == 0 || nums.Length == 1) return;
+
+            Queue<int> delay = new Queue<int>();
+            for (int i = nums.Length - k; i < nums.Length; i++) // k~
+            {
+                delay.Enqueue(nums[i]);
+            }
+            for (int i = 0; i < nums.Length - k; i++) // ~k
+            {
+                delay.Enqueue(nums[i]);
+            }
+
+            for (int i = 0; delay.Count > 0; i++)
+            {
+                nums[i] = delay.Dequeue();
+            }
+        }
     }
 }

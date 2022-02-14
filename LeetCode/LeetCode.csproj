@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Problem_Database.cs" />
     <Compile Include="Study_Plan-Algorithm.cs" />
     <Compile Include="Problems.cs" />
     <Compile Include="Form1.cs">

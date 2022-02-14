@@ -44,13 +44,13 @@ namespace LeetCode
             //streamChecker.Query('k'); // return False
             //streamChecker.Query('l'); // return True, because 'kl' is in the wordlist
 
-            int[] nums = new int[] { 1,3,5,6 },
-                  nums2 = new int[] { 1 };
-            Console.WriteLine(Study_Plan_Algorithm.SearchInsert(nums, 5));
-            Console.WriteLine(Study_Plan_Algorithm.SearchInsert(nums, 2));
-            Console.WriteLine(Study_Plan_Algorithm.SearchInsert(nums, 7));
-            //Console.WriteLine(Study_Plan_Data_Structure.Merge(nums, 0 , nums2, 1));
-
+            int[] nums = new int[] { 1,2,3,4,5,6,7 },
+                  nums2 = new int[] { 2, 2 };
+            int[][] mat = new int[2][];
+            mat[0] = new int[] { 1,2 };
+            mat[1] = new int[] { 3,4 };
+            //Console.WriteLine(Study_Plan_Algorithm.Rotate(nums, 3));
+            Study_Plan_Algorithm.Rotate(nums, 3);
         }
 
         private void MergeTwoLists() // Ex.21

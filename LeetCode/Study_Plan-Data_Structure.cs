@@ -10,6 +10,7 @@ namespace LeetCode
 {
     internal class Study_Plan_Data_Structure
     {
+        // Day 1
         /// <summary>
         /// Problems 217. Contains Duplicate
         /// </summary>
@@ -72,7 +73,7 @@ namespace LeetCode
             //}
             //return maxSum;
         }
-
+        // Day 2
         /// <summary>
         /// Problems 1. Two Sum
         /// </summary>
@@ -106,7 +107,7 @@ namespace LeetCode
                            nums2[n - 1] > nums1[m - 1] ? nums2[--n] : nums1[--m];
             }
         }
-
+        // Day 3
         /// <summary>
         /// Problems 350. Intersection of Two Arrays II
         /// </summary>
@@ -164,7 +165,7 @@ namespace LeetCode
             }
             return profit;
         }
-
+        // Day 4
         /// <summary>
         /// Problems 566. Reshape the Matrix
         /// </summary>
@@ -210,43 +211,103 @@ namespace LeetCode
             }
             return result;
         }
-
+        // Day 5
         /// <summary>
         /// Problems 36. Valid Sudoku
         /// </summary>
         public static bool IsValidSudoku(char[][] board)
         {
-            HashSet<char> validSet = new HashSet<char>();
-            // Row
-            for (int row = 0; row < board.Length; row++) 
+            HashSet<char> rowSet = new HashSet<char>(),
+                          colSet = new HashSet<char>(),
+                          subboxSet = new HashSet<char>();
+            char temp;
+            for (int row = 0; row < 9; row++)
             {
-                for (int col = 0; col < board.GetLength(1); col++)
+                for (int col = 0; col < 9; col++)
                 {
-                    char temp = board[row][col];
+                    temp = board[row][col]; // row
+                    //Console.WriteLine(row.ToString() + "," + col.ToString());
                     if (temp != '.')
-                        if (!validSet.Contains(temp)) validSet.Add(temp);
+                        if (!rowSet.Contains(temp)) rowSet.Add(temp);
                         else return false;
 
-                }
-                validSet.Clear();
-            }
-            // Column
-            for (int col = 0; col < board.GetLength(1); col++)
-            {
-                for (int row = 0; row < board.Length; row++)
-                {
-                    char temp = board[row][col];
+                    temp = board[col][row]; // col
+                    //Console.WriteLine(row.ToString() + "," + col.ToString());
                     if (temp != '.')
-                        if (!validSet.Contains(temp)) validSet.Add(temp);
+                        if (!colSet.Contains(temp)) colSet.Add(temp);
                         else return false;
 
+                    temp = board[col / 3 + row / 3 * 3][col % 3 + row % 3 * 3]; // sub-boxes
+                    //Console.WriteLine((sub_box / 3 + box / 3 * 3).ToString() + "," + (sub_box % 3 + box % 3 * 3).ToString());
+                    if (temp != '.')
+                        if (!subboxSet.Contains(temp)) subboxSet.Add(temp);
+                        else return false;
                 }
-                validSet.Clear();
+                rowSet.Clear();
+                colSet.Clear();
+                subboxSet.Clear();
             }
-            // Sub-Boxes 3*3
-
-
             return true;
         }
+        /// <summary>
+        /// Problems 74. Search a 2D Matrix
+        /// </summary>
+        public static bool SearchMatrix(int[][] matrix, int target)
+        {
+            // 遍歷
+            //for (int row = 0; row < matrix.Length; row++)
+            //{
+            //    for (int col = 0; col < matrix[0].Length; col++)
+            //    {
+            //        if (matrix[row][col] == target) return true;
+            //        else if (matrix[row][col] > target) return false;
+            //    }
+            //}
+            //return false;
+
+            // 二分法
+            int m = matrix.Length,
+                n = matrix[0].Length,
+                left = 0,
+                right = m * n - 1,
+                mid,
+                curr;
+            if (m * n == 1) return matrix[0][0] == target;
+            while (left + 1 < right)
+            {
+                mid = (left + right) / 2;
+                curr = matrix[mid / n][mid % n];
+                if (curr == target) return true;
+                if (curr > target) right = mid;
+                else if (curr < target) left = mid;
+            }
+            return matrix[right / n][right % n] == target || matrix[left / n][left % n] == target ? true : false;
+        }
+        // Day 6
+        /// <summary>
+        /// Problems 387. First Unique Character in a String
+        /// </summary>
+        public static int FirstUniqChar(string s)
+        {
+            Dictionary<char, int> dicS = new Dictionary<char, int>();
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (dicS.ContainsKey(s[i])) dicS[(s[i])]++;
+                else dicS.Add(s[i], 1);
+            }
+            var temp = dicS.Where(x => x.Value == 1);
+            int index = temp.Count() > 0 ? s.IndexOf(temp.First().Key) : -1;
+            return index;
+        }
+        /// <summary>
+        /// Problems 383. Ransom Note
+        /// </summary>
+        public static bool CanConstruct(string ransomNote, string magazine)
+        {
+
+        }
+        /// <summary>
+        /// Problems 242. Valid Anagram
+        /// </summary>
     }
 }

@@ -11,9 +11,9 @@ using System.Windows.Forms;
 
 namespace LeetCode
 {
-    public partial class Form1 : Form
+    public partial class Solution : Form
     {
-        public Form1()
+        public Solution()
         {
             InitializeComponent();
         }
@@ -44,13 +44,13 @@ namespace LeetCode
             //streamChecker.Query('k'); // return False
             //streamChecker.Query('l'); // return True, because 'kl' is in the wordlist
 
-            int[] nums = new int[] { 1,2,3,4,5,6,7 },
+            int[] nums = new int[] { 2,3,6,7 },
                   nums2 = new int[] { 2, 2 };
-            int[][] mat = new int[2][];
-            mat[0] = new int[] { 1,2 };
-            mat[1] = new int[] { 3,4 };
-            //Console.WriteLine(Study_Plan_Algorithm.Rotate(nums, 3));
-            Study_Plan_Algorithm.Rotate(nums, 3);
+            int[][] matrix = new int[1][];
+            matrix[0] = new int[] { 1,3 };
+            var temp = Problems.CombinationSum(nums, 7);
+            //Console.WriteLine(Study_Plan_Algorithm.FirstBadVersion("loveleetcode"));
+            //Study_Plan_Data_Structure.FirstUniqChar("loveleetcode");
         }
 
         private void MergeTwoLists() // Ex.21

@@ -1,6 +1,6 @@
 ﻿namespace LeetCode
 {
-    partial class Form1
+    partial class Solution
     {
         /// <summary>
         /// Required designer variable.

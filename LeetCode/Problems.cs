@@ -1053,6 +1053,83 @@ namespace LeetCode
             }
             return maxLevel;
         }
+        /// <summary>
+        /// Problems 136. Single Number
+        /// </summary>
+        public int SingleNumber(int[] nums)
+        {
+            //List<int> numList = new List<int>();
+            HashSet<int> numSet = new HashSet<int>();
+            foreach (int num in nums)
+            {
+                if (numSet.Contains(num)) numSet.Remove(num);
+                else numSet.Add(num);
+            }
+            // return numList[0];
+            return numSet.First();
+
+            // 公式解:XOR(^)
+            //int sum = 0;
+            //Array.ForEach(nums, num => sum ^= num);
+            //return sum;
+        }
+        /// <summary>
+        /// Problems 39. Combination Sum
+        /// </summary>
+        public static IList<IList<int>> CombinationSum(int[] candidates, int target)
+        {
+            //Array.Sort(candidates);
+            //IList<IList<int>> combinationList = new List<IList<int>>(); // sum == target
+            //Queue<int[]> maybeQueue = new Queue<int[]>();// sum < target
+            //if (candidates[0] > target) return combinationList; // 如果candidates為正序
+            //else
+            //{
+            //    for (int i = 0; i < candidates.Length; i++)
+            //    {
+            //        int[] temp = { candidates[i] };
+            //        if (candidates[i] == target) combinationList.Add(temp);
+            //        else if (candidates[i] < target) maybeQueue.Enqueue(temp);
+            //    }
+            //}
+            //while (maybeQueue.Count > 0)
+            //{
+            //    List<int> maybeList = new List<int>(maybeQueue.Dequeue());
+            //    for (int i = Array.IndexOf(candidates, maybeList.Max()); i < candidates.Length; i++)
+            //    {
+            //        List<int> currMaybeList = new List<int>(maybeList);
+            //        currMaybeList.Add(candidates[i]);
+            //        int sum = currMaybeList.Sum();
+            //        if (sum == target) combinationList.Add(currMaybeList);
+            //        else if (sum < target) maybeQueue.Enqueue(currMaybeList.ToArray());
+            //    }
+            //}
+            //return combinationList;
+
+            Array.Sort(candidates); // candidates為正序
+            IList<IList<int>> combinationList = new List<IList<int>>(); // sum == target
+            GetCombination(new List<int>(), 0, target);
+            return combinationList;
+
+            // 新增candidates[i]>移除candidates[last item]>增加candidates[++i]>直到i==candidates.length
+            void GetCombination(List<int> currList, int candidates_pos = 0, int remaining = 0) 
+            {
+                if (remaining == 0)
+                {
+                    List<int> temp = new List<int>(currList); // deep copy
+                    combinationList.Add(temp);
+                    return;
+                }
+
+                for (int i = candidates_pos; i < candidates.Length && candidates[i] <= remaining; i++)
+                {
+                    currList.Add(candidates[i]);
+                    remaining -= candidates[i];                    
+                    if (remaining >= 0) GetCombination(currList, i, remaining);
+                    currList.RemoveAt(currList.Count - 1);
+                    remaining += candidates[i];
+                }
+            }
+        }
 
 
 

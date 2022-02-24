@@ -304,10 +304,62 @@ namespace LeetCode
         /// </summary>
         public static bool CanConstruct(string ransomNote, string magazine)
         {
-
+            //Dictionary<char, int> magazineDic = new Dictionary<char, int>();
+            //foreach (char letter in magazine)
+            //{
+            //    if (magazineDic.ContainsKey(letter)) magazineDic[letter]++;
+            //    else magazineDic[letter] = 1;
+            //}
+            //foreach (char c in ransomNote)
+            //{
+            //    if (magazineDic.ContainsKey(c))
+            //        if (magazineDic[c] == 0) return false;
+            //        else magazineDic[c]--;
+            //    else return false;
+            //}
+            int[] letter = new int[26];
+            for (int i = 0; i < magazine.Length; i++)
+            {
+                letter[magazine[i] - 'a']++;
+            }
+            for (int i = 0; i < ransomNote.Length; i++)
+            {
+                if (--letter[ransomNote[i] - 'a'] < 0) return false;
+            }
+            return true;
         }
         /// <summary>
         /// Problems 242. Valid Anagram
         /// </summary>
+        public static bool IsAnagram(string s, string t)
+        {
+            int[] letter = new int[26];
+            if (s.Length != t.Length) return false;
+            for (int i = 0; i < s.Length; i++)
+            {
+                letter[s[i] - 'a']++;
+            }
+            for (int i = 0; i < t.Length; i++)
+            {
+                if (--letter[t[i] - 'a'] < 0) return false;
+            }
+            return true;
+        }
+        // Day 7
+        /// <summary>
+        /// Problems 141. Linked List Cycle
+        /// </summary> 
+        public static bool HasCycle(Problems.ListNode head)
+        {
+            Hashtable lnTable = new Hashtable();
+            while (head != null)
+            {
+                if (lnTable[head.val] == null) lnTable[head.val] = true;
+                else return true;
+                head = head.next;
+            }
+            return false;
+        }
+
     }
 }

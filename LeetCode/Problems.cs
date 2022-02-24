@@ -33,6 +33,29 @@ namespace LeetCode
                 this.right = right;
             }
         }
+        public class Node
+        {
+            public int val;
+            public IList<Node> neighbors;
+
+            public Node()
+            {
+                val = 0;
+                neighbors = new List<Node>();
+            }
+
+            public Node(int _val)
+            {
+                val = _val;
+                neighbors = new List<Node>();
+            }
+
+            public Node(int _val, List<Node> _neighbors)
+            {
+                val = _val;
+                neighbors = _neighbors;
+            }
+        }
         // Topic: Algorithms
         /// <summary>
         /// Problems 2
@@ -557,12 +580,18 @@ namespace LeetCode
         /// </summary>
         public static int TitleToNumber(string columnTitle)
         {
-            int res = 0;
-            foreach (char column in columnTitle)
+            //int res = 0;
+            //foreach (char column in columnTitle)
+            //{
+            //    res = res * 26 + ColumnName(column);
+            //}
+            //return res;
+            int sum = 0;
+            for (int i = 0; i < columnTitle.Length; i++)
             {
-                res = res * 26 + ColumnName(column);
+                sum = sum * 26 + 1 + columnTitle[i] - 'A';
             }
-            return res;
+            return sum;
         }
         private static int ColumnName(char name)
         {
@@ -1130,6 +1159,50 @@ namespace LeetCode
                 }
             }
         }
+        /// <summary>
+        /// Problems 169. Majority Element
+        /// </summary>
+        public static int MajorityElement(int[] nums)
+        {
+            Dictionary<int, int> numDic = new Dictionary<int, int>();
+            foreach (int num in nums)
+            {
+                if (numDic.ContainsKey(num)) numDic[num]++;
+                else numDic[num] = 1;
+            }
+            return numDic.OrderByDescending(x => x.Value).FirstOrDefault().Key;
+        }
+        /// <summary>
+        /// Problems 133. Clone Graph
+        /// </summary>
+        public static Node CloneGraph(Node node)
+        {
+            if (node == null) return null; // Null
+            Node cloneNode = new Node(node.val); // First node
+            Hashtable nodeTable = new Hashtable(); // Node table
+            nodeTable[node.val] = cloneNode; // Add first node
+            Helper(node, cloneNode); // Check all node of neighbor
+            return cloneNode;
+
+            void Helper(Node oldNode, Node newNode)
+            {
+                while (newNode.neighbors.Count < oldNode.neighbors.Count)
+                {
+                    Node neighbor = oldNode.neighbors[newNode.neighbors.Count];
+                    if (!nodeTable.ContainsKey(neighbor.val)) // Node table haven't the oldnode
+                    {
+                        nodeTable[neighbor.val] = new Node(neighbor.val); // The node added
+                    }
+
+                    if (!newNode.neighbors.Contains((Node)nodeTable[neighbor.val])) // The node haven't neighbor node
+                    {
+                        newNode.neighbors.Add((Node)nodeTable[neighbor.val]); // Add neighbor node
+                        Helper(neighbor, newNode.neighbors.Last());
+                    }
+                }
+            }
+        }
+        
 
 
 

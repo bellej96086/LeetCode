@@ -44,13 +44,27 @@ namespace LeetCode
             //streamChecker.Query('k'); // return False
             //streamChecker.Query('l'); // return True, because 'kl' is in the wordlist
 
-            int[] nums = new int[] { 2,3,6,7 },
+            int[] nums = new int[] { 3,2,3 },
                   nums2 = new int[] { 2, 2 };
             int[][] matrix = new int[1][];
             matrix[0] = new int[] { 1,3 };
-            var temp = Problems.CombinationSum(nums, 7);
+            Problems.Node node1 = new Problems.Node(1),
+                node2 = new Problems.Node(2),
+                node3 = new Problems.Node(3),
+                node4 = new Problems.Node(4);
+            node1.neighbors.Add(node2);
+            node1.neighbors.Add(node4);
+            node2.neighbors.Add(node1);
+            node2.neighbors.Add(node3);
+            node3.neighbors.Add(node2);
+            node3.neighbors.Add(node4);
+            node4.neighbors.Add(node1);
+            node4.neighbors.Add(node3);
+
+            var temp = Problems.CloneGraph(node1);
             //Console.WriteLine(Study_Plan_Algorithm.FirstBadVersion("loveleetcode"));
-            //Study_Plan_Data_Structure.FirstUniqChar("loveleetcode");
+            Problems.ListNode head = new Problems.ListNode();
+            Study_Plan_Data_Structure.HasCycle(head);
         }
 
         private void MergeTwoLists() // Ex.21

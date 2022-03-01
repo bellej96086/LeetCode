@@ -61,10 +61,20 @@ namespace LeetCode
             node4.neighbors.Add(node1);
             node4.neighbors.Add(node3);
 
-            var temp = Problems.CloneGraph(node1);
+            //var temp = Problems.CountBits(2);
             //Console.WriteLine(Study_Plan_Algorithm.FirstBadVersion("loveleetcode"));
-            Problems.ListNode head = new Problems.ListNode();
-            Study_Plan_Data_Structure.HasCycle(head);
+            //Data_Structure_I.ListNode list1 = new Data_Structure_I.ListNode(1);
+            //list1.next = new Data_Structure_I.ListNode(1);
+            //list1.next.next = new Data_Structure_I.ListNode(2);
+            //list1.next.next.next = new Data_Structure_I.ListNode(3);
+            //list1.next.next.next.next = new Data_Structure_I.ListNode(3);
+            Data_Structure_I.MyQueue obj = new Data_Structure_I.MyQueue();
+            obj.Push(1);
+            obj.Push(2);
+            obj.Pop();
+            obj.Peek();
+            obj.Empty();
+            //Data_Structure_I.IsValid("]");
         }
 
         private void MergeTwoLists() // Ex.21

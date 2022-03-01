@@ -409,81 +409,6 @@ namespace LeetCode
             return result.next; //answer從前一位數開始，所以取下一位
         }
         /// <summary>
-        /// Problems 94. Binary Tree Inorder Traversal
-        /// </summary>
-        public static IList<int> InorderTraversal(TreeNode root)
-        {
-            //Left>Mid>Rigft
-            List<int> result = new List<int>();
-            TreeNode currentTN = root;
-            Stack<TreeNode> TN_seq = new Stack<TreeNode>();
-            while (currentTN != null || TN_seq.Count > 0)
-            {
-                while (currentTN != null)
-                {
-                    TN_seq.Push(currentTN);
-                    currentTN = currentTN.left;
-                }
-                if (TN_seq.Count > 0)
-                {
-                    currentTN = TN_seq.Pop();
-                    result.Add(currentTN.val);
-                    currentTN = currentTN.right;
-                }
-            }
-            return result;
-        }
-        /// <summary>
-        /// Problems 144. Binary Tree Preorder Traversal
-        /// </summary>
-        public static IList<int> PreorderTraversal(TreeNode root)
-        {
-            //Mid>Left>Right
-            List<int> result = new List<int>();
-            TreeNode currentTN = root;
-            Stack<TreeNode> TN_seq = new Stack<TreeNode>();
-            while (currentTN != null || TN_seq.Count > 0)
-            {
-                while (currentTN != null)
-                {
-                    TN_seq.Push(currentTN);
-                    result.Add(currentTN.val);
-                    currentTN = currentTN.left;
-                }
-                if (TN_seq.Count > 0)
-                {
-                    currentTN = TN_seq.Pop();
-                    currentTN = currentTN.right;
-                }
-            }
-            return result;
-        }
-        /// <summary>
-        /// Problems 145. Binary Tree Postorder Traversal
-        /// </summary>
-        public static IList<int> PostorderTraversal(TreeNode root)
-        {
-            //Left>Right>Mid
-            List<int> result = new List<int>();
-            TreeNode currentTN = root;
-            Stack<TreeNode> TN_seq = new Stack<TreeNode>();
-            while (currentTN != null || TN_seq.Count > 0)
-            {
-                while (currentTN != null)
-                {
-                    TN_seq.Push(currentTN);
-                    result.Insert(0, currentTN.val);
-                    currentTN = currentTN.right;
-                }
-                if (TN_seq.Count > 0)
-                {
-                    currentTN = TN_seq.Pop();
-                    currentTN = currentTN.left;
-                }
-            }
-            return result;
-        }
-        /// <summary>
         /// Problems 100. Same Tree
         /// </summary>
         public static bool IsSameTree(TreeNode p, TreeNode q)
@@ -1202,7 +1127,18 @@ namespace LeetCode
                 }
             }
         }
-        
+        /// <summary>
+        /// Problems 338. Counting Bits
+        /// </summary>
+        public static int[] CountBits(int n)
+        {
+            int[] result = new int[n + 1];
+            for (int i = 1; i <= n; i++)
+            {
+                result[i] = Convert.ToString(i, 2).ToArray().Where(x => x == '1').Count();
+            }
+            return result;
+        }
 
 
 

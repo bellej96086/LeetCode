@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LeetCode
 {
-    internal class Study_Plan_Algorithm
+    internal class Algorithm_I
     {
         /// <summary>
         /// Problems 704. Binary Search

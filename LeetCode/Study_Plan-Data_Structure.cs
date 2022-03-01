@@ -8,9 +8,32 @@ using System.Collections;
 
 namespace LeetCode
 {
-    internal class Study_Plan_Data_Structure
+    internal class Data_Structure_I
     {
-        // Day 1
+        //Definition for singly-linked list.
+        public class ListNode 
+        {
+             public int val;
+             public ListNode next;
+             public ListNode(int val=0, ListNode next=null) {
+                 this.val = val;
+                 this.next = next;
+             }
+        }
+        
+        //Definition for a binary tree node.
+        public class TreeNode 
+        {
+             public int val;
+             public TreeNode left;
+             public TreeNode right;
+             public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+                 this.val = val;
+                 this.left = left;
+                 this.right = right;
+             }
+        }
+        // Day 1 Array
         /// <summary>
         /// Problems 217. Contains Duplicate
         /// </summary>
@@ -348,18 +371,313 @@ namespace LeetCode
         // Day 7
         /// <summary>
         /// Problems 141. Linked List Cycle
-        /// </summary> 
-        public static bool HasCycle(Problems.ListNode head)
+        /// </summary>
+        public static bool HasCycle(ListNode head)
         {
-            Hashtable lnTable = new Hashtable();
+            int count = 0;
             while (head != null)
             {
-                if (lnTable[head.val] == null) lnTable[head.val] = true;
-                else return true;
+                if (count > 10000) return true; // 改head的value並確認也可以，不該改變未clone的ListNode(說不定還在使用?)
+                count++;
                 head = head.next;
             }
             return false;
         }
+        /// <summary>
+        /// Problems 21. Merge Two Sorted Lists
+        /// </summary>
+        public static ListNode MergeTwoLists(ListNode list1, ListNode list2)
+        {
+            ListNode merge_list = new ListNode(0),
+                root = merge_list,
+                list;
+            while (list1 != null || list2 != null)
+            {
+                if (list1 == null) list = list2;
+                else if (list2 == null) list = list1;
+                else list = list2.val > list1.val ? list1 : list2;
+                root.next = new ListNode(list.val);
+                root = root.next;
+                if (list.Equals(list1)) list1 = list1.next;
+                else if (list.Equals(list2)) list2 = list2.next;
+            }
+            return merge_list.next;
+        }
+        /// <summary>
+        /// Problems 203. Remove Linked List Elements
+        /// </summary>
+        public static ListNode RemoveElements(ListNode head, int val)
+        {
+            ListNode root = new ListNode(0, head),
+                curr = root;
+            while (curr.next != null)
+            {
+                if (curr.next.val == val) 
+                {
+                    curr.next = curr.next.next;
+                    continue;
+                }
+                curr = curr.next;
+            }    
+            return root.next;
+        }
+        // Day 8
+        /// <summary>
+        /// Problems 206. Reverse Linked List
+        /// </summary>
+        public static ListNode ReverseList(ListNode head)
+        {
+            Stack<int> stack = new Stack<int>();
+            while (head != null)
+            {
+                stack.Push(head.val);
+                head = head.next;
+            }
+            ListNode reverse = new ListNode(0),
+                curr = reverse;
+            while (stack.Count > 0)
+            {
+                curr.next = new ListNode(stack.Pop());
+                curr = curr.next;
+            }
+            return reverse.next;
+        }
+        /// <summary>
+        /// Problems 83. Remove Duplicates from Sorted List
+        /// </summary>
+        public static ListNode DeleteDuplicates(ListNode head)
+        {
+            ListNode root = new ListNode(-101, head),
+                curr = root;
+            while (curr.next != null)
+            {
+                if (curr.next.val == curr.val)
+                    curr.next = curr.next.next;
+                else
+                    curr = curr.next;
+            }
+            return root.next;
+        }
+        // Day 9
+        /// <summary>
+        /// Problems 20. Valid Parentheses
+        /// </summary>
+        public static bool IsValid(string s)
+        {
+            if (s.Length % 2 == 1) return false;
+
+            Stack<char> left_stack = new Stack<char>();
+            foreach (char c in s)
+            {
+                if (c == '(') left_stack.Push(')');
+                else if (c == '[') left_stack.Push(']');
+                else if (c == '{') left_stack.Push('}');
+                else if (left_stack.Count == 0 || left_stack.Pop() != c) return false;
+            }
+            return left_stack.Count == 0;
+        }
+        /// <summary>
+        /// Problems 232. Implement Queue using Stacks
+        /// </summary>
+        public class MyQueue
+        {
+            private Stack<int> stack;
+            private bool statu; // F = stack, T = Queue
+            private void Switch() // Queue <--> Stack
+            {
+                stack = new Stack<int>(stack);
+                statu = !statu;
+            }
+
+            public MyQueue()
+            {
+                stack = new Stack<int>();
+                statu = false;
+            }
+
+            public void Push(int x)
+            {
+                if (statu) Switch();
+                stack.Push(x);
+            }
+
+            public int Pop()
+            {
+                if (!statu) Switch();
+                return stack.Pop();
+            }
+
+            public int Peek()
+            {
+                if (!statu) Switch();
+                return stack.Peek();
+            }
+
+            public bool Empty()
+            {
+                return stack.Count == 0;
+            }
+        }
+        // Day 10
+        /// <summary>
+        /// Problems 144. Binary Tree Preorder Traversal
+        /// </summary>
+        public IList<int> PreorderTraversal(TreeNode root)
+        {
+            List<int> result = new List<int>();
+            TreeNode curr = root;
+            Stack<TreeNode> stack = new Stack<TreeNode>();
+            while (curr != null || stack.Count > 0)
+            {
+                while (curr != null)
+                {
+                    stack.Push(curr.right);
+                    result.Add(curr.val);
+                    curr = curr.left;
+                }
+                if (stack.Count > 0) curr = stack.Pop();
+            }
+            return result;
+        }
+        /// <summary>
+        /// Problems 94. Binary Tree Inorder Traversal
+        /// </summary>
+        public IList<int> InorderTraversal(TreeNode root)
+        {
+            List<int> result = new List<int>();
+            TreeNode curr = root;
+            Stack<TreeNode> stack = new Stack<TreeNode>();
+            while (curr != null || stack.Count > 0)
+            {
+                while (curr != null)
+                {
+                    stack.Push(curr);
+                    curr = curr.left;
+                }
+                if (stack.Count > 0)
+                {
+                    curr = stack.Pop();
+                    result.Add(curr.val);
+                    curr = curr.right;
+                }
+            }
+            return result;
+        }
+        /// <summary>
+        /// Problems 145. Binary Tree Postorder Traversal
+        /// </summary>
+        public static IList<int> PostorderTraversal(TreeNode root)
+        {
+            TreeNode curr = root;
+            Stack<TreeNode> stack = new Stack<TreeNode>();
+            Stack<int> result = new Stack<int>();
+            while (curr != null || stack.Count > 0)
+            {
+                while (curr != null)
+                {
+                    stack.Push(curr.left);
+                    result.Push(curr.val);
+                    curr = curr.right;
+                }
+                curr = stack.Pop();
+            }
+            return result.ToList();
+        }
+        // Day 11
+        /// <summary>
+        /// Problems 102. Binary Tree Level Order Traversal
+        /// </summary>
+        public IList<IList<int>> LevelOrder(TreeNode root)
+        {
+            IList<IList<int>> result = new List<IList<int>>();
+            if (root == null) return result;
+            List<int> level = new List<int>();
+            Stack<TreeNode> curr = new Stack<TreeNode>(),
+                next = new Stack<TreeNode>();
+            curr.Push(root);
+            while (curr.Count > 0)
+            {
+                while (curr.Count > 0)
+                {
+                    TreeNode currTree = curr.Pop();
+                    level.Add(currTree.val);
+                    if (currTree.left != null) next.Push(currTree.left);
+                    if (currTree.right != null) next.Push(currTree.right);
+                }
+                if (curr.Count == 0)
+                {
+                    curr = new Stack<TreeNode>(next);
+                    next.Clear();
+                    result.Add(level);
+                    level = new List<int>();
+                }
+            }
+            return result;
+        }
+        /// <summary>
+        /// Problems 104. Maximum Depth of Binary Tree
+        /// </summary>
+        public int MaxDepth(TreeNode root)
+        {
+            // 改成level尋找試試看
+            int level = 0,
+                maxLevel = 0;
+            TreeNode currentTN = root;
+            Stack<TreeNode> TNStack = new Stack<TreeNode>();
+            Stack<int> levelStack = new Stack<int>();
+            while (currentTN != null || TNStack.Count > 0)
+            {
+                while (currentTN != null)
+                {
+                    level++;
+                    maxLevel = level > maxLevel ? level : maxLevel;
+                    levelStack.Push(level);
+                    TNStack.Push(currentTN);
+                    currentTN = currentTN.left;
+                }
+                if (TNStack.Count > 0)
+                {
+                    level = levelStack.Pop();
+                    currentTN = TNStack.Pop();
+                    currentTN = currentTN.right;
+                }
+            }
+            return maxLevel;
+        }
+        /// <summary>
+        /// Problems 101. Symmetric Tree
+        /// </summary>
+
+        // Day 12
+        /// <summary>
+        /// Problems 226. Invert Binary Tree
+        /// </summary>
+
+        /// <summary>
+        /// Problems 112. Path Sum
+        /// </summary>
+
+        // Day 13
+        /// <summary>
+        /// Problems 700. Search in a Binary Search Tree
+        /// </summary>
+
+        /// <summary>
+        /// Problems 701. Insert into a Binary Search Tree
+        /// </summary>
+
+        // Day 14
+        /// <summary>
+        /// Problems 98. Validate Binary Search Tree
+        /// </summary>
+
+        /// <summary>
+        /// Problems 653. Two Sum IV - Input is a BST
+        /// </summary>
+
+        /// <summary>
+        /// Problems 235. Lowest Common Ancestor of a Binary Search Tree
+        /// </summary>
 
     }
 }

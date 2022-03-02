@@ -522,7 +522,7 @@ namespace LeetCode
         /// <summary>
         /// Problems 144. Binary Tree Preorder Traversal
         /// </summary>
-        public IList<int> PreorderTraversal(TreeNode root)
+        public static IList<int> PreorderTraversal(TreeNode root)
         {
             List<int> result = new List<int>();
             TreeNode curr = root;
@@ -542,7 +542,7 @@ namespace LeetCode
         /// <summary>
         /// Problems 94. Binary Tree Inorder Traversal
         /// </summary>
-        public IList<int> InorderTraversal(TreeNode root)
+        public static IList<int> InorderTraversal(TreeNode root)
         {
             List<int> result = new List<int>();
             TreeNode curr = root;
@@ -587,14 +587,13 @@ namespace LeetCode
         /// <summary>
         /// Problems 102. Binary Tree Level Order Traversal
         /// </summary>
-        public IList<IList<int>> LevelOrder(TreeNode root)
+        public static IList<IList<int>> LevelOrder(TreeNode root)
         {
             IList<IList<int>> result = new List<IList<int>>();
-            if (root == null) return result;
             List<int> level = new List<int>();
             Stack<TreeNode> curr = new Stack<TreeNode>(),
                 next = new Stack<TreeNode>();
-            curr.Push(root);
+            if (root != null) curr.Push(root);
             while (curr.Count > 0)
             {
                 while (curr.Count > 0)
@@ -617,67 +616,232 @@ namespace LeetCode
         /// <summary>
         /// Problems 104. Maximum Depth of Binary Tree
         /// </summary>
-        public int MaxDepth(TreeNode root)
+        public static int MaxDepth(TreeNode root)
         {
-            // 改成level尋找試試看
-            int level = 0,
-                maxLevel = 0;
-            TreeNode currentTN = root;
-            Stack<TreeNode> TNStack = new Stack<TreeNode>();
-            Stack<int> levelStack = new Stack<int>();
-            while (currentTN != null || TNStack.Count > 0)
+            Stack<TreeNode> curr = new Stack<TreeNode>(),
+                next = new Stack<TreeNode>();
+            if (root != null) curr.Push(root);
+            int level = 0;
+            while (curr.Count > 0)
             {
-                while (currentTN != null)
+                level++;
+                while (curr.Count > 0)
                 {
-                    level++;
-                    maxLevel = level > maxLevel ? level : maxLevel;
-                    levelStack.Push(level);
-                    TNStack.Push(currentTN);
-                    currentTN = currentTN.left;
+                    TreeNode currTree = curr.Pop();
+                    if (currTree.left != null) next.Push(currTree.left);
+                    if (currTree.right != null) next.Push(currTree.right);
                 }
-                if (TNStack.Count > 0)
+                if (next.Count > 0)
                 {
-                    level = levelStack.Pop();
-                    currentTN = TNStack.Pop();
-                    currentTN = currentTN.right;
+                    curr = new Stack<TreeNode>(next);
+                    next.Clear();
                 }
             }
-            return maxLevel;
+            return level;
         }
         /// <summary>
         /// Problems 101. Symmetric Tree
         /// </summary>
-
+        public static bool IsSymmetric(TreeNode root)
+        {
+            TreeNode lRoot = root.left,
+                rRoot = root.right;
+            Stack<TreeNode> lCurr = new Stack<TreeNode>(),
+                lNext = new Stack<TreeNode>(),
+                rCurr = new Stack<TreeNode>(),
+                rNext = new Stack<TreeNode>();
+            if (lRoot != null && rRoot != null)
+            {
+                lCurr.Push(lRoot);
+                rCurr.Push(rRoot);
+            }
+            else if (lRoot == null ^ rRoot == null) return false;
+            else return true;
+            while (lCurr.Count > 0 || rCurr.Count > 0)
+            {
+                while (lCurr.Count > 0 || rCurr.Count > 0)
+                {
+                    TreeNode lCurrTree = lCurr.Pop(),
+                        rCurrTree = rCurr.Pop();
+                    if (lCurrTree.val == rCurrTree.val)
+                    {
+                        if (lCurrTree.left != null && rCurrTree.right != null)
+                        {
+                            lNext.Push(lCurrTree.left);
+                            rNext.Push(rCurrTree.right);
+                        }
+                        else if (lCurrTree.left == null ^ rCurrTree.right == null) return false;
+                        if (lCurrTree.right != null && rCurrTree.left != null)
+                        {
+                            lNext.Push(lCurrTree.right);
+                            rNext.Push(rCurrTree.left);
+                        }
+                        else if (lCurrTree.right == null ^ rCurrTree.left == null) return false;
+                    }
+                    else return false;
+                }
+                if (lNext.Count > 0)
+                {
+                    lCurr = new Stack<TreeNode>(lNext);
+                    rCurr = new Stack<TreeNode>(rNext);
+                    lNext.Clear();
+                    rNext.Clear();
+                }
+            }
+            return true;
+        }
         // Day 12
         /// <summary>
         /// Problems 226. Invert Binary Tree
         /// </summary>
-
+        public TreeNode InvertTree(TreeNode root)
+        {
+            if (root == null) return null;
+            TreeNode invert = new TreeNode(root.val),
+                currInvert = invert,
+                currTree = root;
+            Stack<TreeNode> stackRoot = new Stack<TreeNode>(),
+                stackInvert = new Stack<TreeNode>();
+            if (root != null)
+            {
+                stackRoot.Push(root);
+                stackInvert.Push(currInvert);
+            }
+            while (stackRoot.Count > 0)
+            {
+                currTree = stackRoot.Pop();
+                currInvert = stackInvert.Pop();
+                if (currTree.left != null)
+                {
+                    currInvert.right = new TreeNode(currTree.left.val);
+                    stackInvert.Push(currInvert.right);
+                    stackRoot.Push(currTree.left);
+                }
+                if (currTree.right != null)
+                {
+                    currInvert.left = new TreeNode(currTree.right.val);
+                    stackInvert.Push(currInvert.left);
+                    stackRoot.Push(currTree.right);
+                }
+            }
+            return invert;
+        }
         /// <summary>
         /// Problems 112. Path Sum
         /// </summary>
-
+        public static bool HasPathSum(TreeNode root, int targetSum)
+        {
+            TreeNode curr = root;
+            Stack<TreeNode> stack = new Stack<TreeNode>();
+            while (curr != null || stack.Count > 0)
+            {
+                while (curr != null)
+                {
+                    stack.Push(curr);
+                    if (curr.left != null) curr.left.val += curr.val;
+                    if (curr.right != null) curr.right.val += curr.val;
+                    if (curr.left == null && curr.right == null && curr.val == targetSum) 
+                        return true;
+                    curr = curr.left;
+                }
+                if (stack.Count > 0) curr = stack.Pop().right;
+            }
+            return false;
+        }
         // Day 13
         /// <summary>
         /// Problems 700. Search in a Binary Search Tree
         /// </summary>
-
+        public TreeNode SearchBST(TreeNode root, int val)
+        {
+            // BST(Binary Search Tree):left.val < root.val < right.val
+            TreeNode curr = root;
+            while (curr != null)
+            {
+                if (curr.val == val) return curr;
+                curr = curr.val > val ? curr.left : curr.right;
+            }
+            return null;
+        }
         /// <summary>
         /// Problems 701. Insert into a Binary Search Tree
         /// </summary>
-
+        public static TreeNode InsertIntoBST(TreeNode root, int val)
+        {
+            // BST(Binary Search Tree):left.val < root.val < right.val
+            if (root == null) return new TreeNode(5);
+            TreeNode curr = root;
+            while (curr != null)
+            {
+                if (curr.val > val)
+                {
+                    if (curr.left == null)
+                    {
+                        curr.left = new TreeNode(val);
+                        break;
+                    }
+                    curr = curr.left;
+                }
+                else
+                {
+                    if (curr.right == null)
+                    {
+                        curr.right = new TreeNode(val);
+                        break;
+                    }
+                    curr = curr.right;
+                }
+            }
+            return root;
+        }
         // Day 14
         /// <summary>
         /// Problems 98. Validate Binary Search Tree
         /// </summary>
+        public static bool IsValidBST(TreeNode root)
+        {
+            return helper(root);
 
+            bool helper(TreeNode treeNode, long min = long.MinValue, long max = long.MaxValue)
+            {
+                if (treeNode == null) return true;
+                if (treeNode.val <= min || treeNode.val >= max) return false;
+                return helper(treeNode.left, min, treeNode.val) && helper(treeNode.right, treeNode.val, max);
+            }
+        }
         /// <summary>
         /// Problems 653. Two Sum IV - Input is a BST
         /// </summary>
-
+        public bool FindTarget(TreeNode root, int k)
+        {
+            HashSet<int> hs = new HashSet<int>();
+            TreeNode curr = root;
+            Stack<TreeNode> stack = new Stack<TreeNode>();
+            while (curr != null || stack.Count > 0)
+            {
+                while (curr != null)
+                {
+                    stack.Push(curr);
+                    if (hs.Contains(curr.val)) return true;
+                    hs.Add(k - curr.val);
+                    curr = curr.left;
+                }
+                if (stack.Count > 0) curr = stack.Pop().right;
+            }
+            return false;
+        }
         /// <summary>
         /// Problems 235. Lowest Common Ancestor of a Binary Search Tree
         /// </summary>
-
+        public TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q)
+        {
+            while (root != null)
+            {
+                if (p.val < root.val && q.val < root.val) root = root.left;
+                else if (p.val > root.val && q.val > root.val) root = root.right;
+                else return root;
+            }
+            return null;
+        }
     }
 }

@@ -63,18 +63,16 @@ namespace LeetCode
 
             //var temp = Problems.CountBits(2);
             //Console.WriteLine(Study_Plan_Algorithm.FirstBadVersion("loveleetcode"));
-            //Data_Structure_I.ListNode list1 = new Data_Structure_I.ListNode(1);
-            //list1.next = new Data_Structure_I.ListNode(1);
-            //list1.next.next = new Data_Structure_I.ListNode(2);
-            //list1.next.next.next = new Data_Structure_I.ListNode(3);
-            //list1.next.next.next.next = new Data_Structure_I.ListNode(3);
-            Data_Structure_I.MyQueue obj = new Data_Structure_I.MyQueue();
-            obj.Push(1);
-            obj.Push(2);
-            obj.Pop();
-            obj.Peek();
-            obj.Empty();
-            //Data_Structure_I.IsValid("]");
+
+            Data_Structure_I.TreeNode treeNode = new Data_Structure_I.TreeNode(32, new Data_Structure_I.TreeNode(26), new Data_Structure_I.TreeNode(47)),
+                root = treeNode;
+            root = root.left;
+            root.left = new Data_Structure_I.TreeNode(19);
+            root = root.left;
+            root.right = new Data_Structure_I.TreeNode(27);
+            root = treeNode.right;
+            root.right = new Data_Structure_I.TreeNode(56);
+            Data_Structure_I.IsValidBST(treeNode);
         }
 
         private void MergeTwoLists() // Ex.21
@@ -106,129 +104,6 @@ namespace LeetCode
             head = head.next;
             head.next = new Problems.ListNode(0);
             Console.WriteLine(Problems.DeleteDuplicates(head_result.next));
-        }
-        private void InorderTraversal() // Ex.94
-        {
-            object[] testcase = new object[] { 1, null, 2, 3, 4, 5, 6, null, null, null, null, 8 };
-            Problems.TreeNode root, root_now;
-            if (testcase.Length == 0)
-                root = null;
-            else
-                root = new Problems.TreeNode((int)testcase[0], null, null);
-            Queue<Problems.TreeNode> root_seq = new Queue<Problems.TreeNode>();
-            root_seq.Enqueue(root);
-            int now = 1;
-            while (testcase.Length > now)
-            {
-                root_now = root_seq.Dequeue();
-                if (testcase[now] != null)
-                {
-                    root_now.left = new Problems.TreeNode((int)testcase[now], null, null);
-                    root_seq.Enqueue(root_now.left);
-                }
-                else
-                    root_now.left = null;
-
-                now++;
-                if (testcase.Length <= now) break;
-
-                if (testcase[now] != null)
-                {
-                    root_now.right = new Problems.TreeNode((int)testcase[now], null, null);
-                    root_seq.Enqueue(root_now.right);
-                }
-                else
-                    root_now.right = null;
-                now++;
-            }
-            while (root_seq.Count > 0)
-            {
-                root_now = root_seq.Dequeue();
-                root_now = null;
-            }
-            Console.WriteLine(Problems.InorderTraversal(root));
-        }
-        private void PreorderTraversal() // Ex.144
-        {
-            object[] testcase = new object[] { 1, null, 2, 3, 4, 5, 6, null, null, null, null, 8 };
-            Problems.TreeNode root, root_now;
-            if (testcase.Length == 0)
-                root = null;
-            else
-                root = new Problems.TreeNode((int)testcase[0], null, null);
-            Queue<Problems.TreeNode> root_seq = new Queue<Problems.TreeNode>();
-            root_seq.Enqueue(root);
-            int now = 1;
-            while (testcase.Length > now)
-            {
-                root_now = root_seq.Dequeue();
-                if (testcase[now] != null)
-                {
-                    root_now.left = new Problems.TreeNode((int)testcase[now], null, null);
-                    root_seq.Enqueue(root_now.left);
-                }
-                else
-                    root_now.left = null;
-
-                now++;
-                if (testcase.Length <= now) break;
-
-                if (testcase[now] != null)
-                {
-                    root_now.right = new Problems.TreeNode((int)testcase[now], null, null);
-                    root_seq.Enqueue(root_now.right);
-                }
-                else
-                    root_now.right = null;
-                now++;
-            }
-            while (root_seq.Count > 0)
-            {
-                root_now = root_seq.Dequeue();
-                root_now = null;
-            }
-            Console.WriteLine(Problems.PreorderTraversal(root));
-        }
-        private void PostorderTraversal() // Ex.145
-        {
-            object[] testcase = new object[] { 1, null, 2, 3, 4, 5, 6, null, null, null, null, 8 };
-            Problems.TreeNode root, root_now;
-            if (testcase.Length == 0)
-                root = null;
-            else
-                root = new Problems.TreeNode((int)testcase[0], null, null);
-            Queue<Problems.TreeNode> root_seq = new Queue<Problems.TreeNode>();
-            root_seq.Enqueue(root);
-            int now = 1;
-            while (testcase.Length > now)
-            {
-                root_now = root_seq.Dequeue();
-                if (testcase[now] != null)
-                {
-                    root_now.left = new Problems.TreeNode((int)testcase[now], null, null);
-                    root_seq.Enqueue(root_now.left);
-                }
-                else
-                    root_now.left = null;
-
-                now++;
-                if (testcase.Length <= now) break;
-
-                if (testcase[now] != null)
-                {
-                    root_now.right = new Problems.TreeNode((int)testcase[now], null, null);
-                    root_seq.Enqueue(root_now.right);
-                }
-                else
-                    root_now.right = null;
-                now++;
-            }
-            while (root_seq.Count > 0)
-            {
-                root_now = root_seq.Dequeue();
-                root_now = null;
-            }
-            Console.WriteLine(Problems.PostorderTraversal(root));
         }
         private void IsSameTree() // Ex.100
         {

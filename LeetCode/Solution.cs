@@ -44,35 +44,10 @@ namespace LeetCode
             //streamChecker.Query('k'); // return False
             //streamChecker.Query('l'); // return True, because 'kl' is in the wordlist
 
-            int[] nums = new int[] { 3,2,3 },
-                  nums2 = new int[] { 2, 2 };
-            int[][] matrix = new int[1][];
-            matrix[0] = new int[] { 1,3 };
-            Problems.Node node1 = new Problems.Node(1),
-                node2 = new Problems.Node(2),
-                node3 = new Problems.Node(3),
-                node4 = new Problems.Node(4);
-            node1.neighbors.Add(node2);
-            node1.neighbors.Add(node4);
-            node2.neighbors.Add(node1);
-            node2.neighbors.Add(node3);
-            node3.neighbors.Add(node2);
-            node3.neighbors.Add(node4);
-            node4.neighbors.Add(node1);
-            node4.neighbors.Add(node3);
+            var temp2 = Problems.GetSmallestString(5, 73);
 
-            //var temp = Problems.CountBits(2);
-            //Console.WriteLine(Study_Plan_Algorithm.FirstBadVersion("loveleetcode"));
-
-            Data_Structure_I.TreeNode treeNode = new Data_Structure_I.TreeNode(32, new Data_Structure_I.TreeNode(26), new Data_Structure_I.TreeNode(47)),
-                root = treeNode;
-            root = root.left;
-            root.left = new Data_Structure_I.TreeNode(19);
-            root = root.left;
-            root.right = new Data_Structure_I.TreeNode(27);
-            root = treeNode.right;
-            root.right = new Data_Structure_I.TreeNode(56);
-            Data_Structure_I.IsValidBST(treeNode);
+            uint n = 0b_00000010100101000001111010011100;
+            var temp = Algorithm_I.reverseBits(n);
         }
 
         private void MergeTwoLists() // Ex.21

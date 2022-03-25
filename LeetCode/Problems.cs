@@ -367,30 +367,6 @@ namespace LeetCode
             return (int)max;
         }
         /// <summary>
-        /// Problems 70. Climbing Stairs
-        /// </summary>
-        public static int ClimbStairs(int n)
-        {
-            // 爬樓梯：N階每次1或2步
-            // 排列組合，C=n!/k!(n-k)!、N=所有元素、K=2的元素，循環n/2次加總
-            // 降低負荷：從N乘到K+1除(N-K)!
-            // VS Studio可以用long，LeetCode會overflow要用double
-            double way = 0;
-            for (int k = n / 2; k >= 0; k--) // 2步可以出現幾個
-            {
-                int count = n - k;
-                way += factorial(count) / factorial(k) / factorial(count - k); // C=n!/(k!(n-k)!)
-            }
-            return Convert.ToInt32(way);
-        }
-        private static double factorial(int n)
-        {
-            double result = 1;
-            for (int i = n; i > 1; i--)
-                result = result * i;
-            return result;
-        }
-        /// <summary>
         /// Problems 83. Remove Duplicates from Sorted List
         /// </summary>
         public static ListNode DeleteDuplicates(ListNode head)
@@ -1008,26 +984,6 @@ namespace LeetCode
             return maxLevel;
         }
         /// <summary>
-        /// Problems 136. Single Number
-        /// </summary>
-        public int SingleNumber(int[] nums)
-        {
-            //List<int> numList = new List<int>();
-            HashSet<int> numSet = new HashSet<int>();
-            foreach (int num in nums)
-            {
-                if (numSet.Contains(num)) numSet.Remove(num);
-                else numSet.Add(num);
-            }
-            // return numList[0];
-            return numSet.First();
-
-            // 公式解:XOR(^)
-            //int sum = 0;
-            //Array.ForEach(nums, num => sum ^= num);
-            //return sum;
-        }
-        /// <summary>
         /// Problems 39. Combination Sum
         /// </summary>
         public static IList<IList<int>> CombinationSum(int[] candidates, int target)
@@ -1139,6 +1095,124 @@ namespace LeetCode
             }
             return result;
         }
+        /// <summary>
+        /// Problems 392. Is Subsequence
+        /// </summary>
+        public bool IsSubsequence(string s, string t)
+        {
+            // t almost contains s
+            if (s.Length == 0) return true;
+            int index = 0;
+            foreach (char c in t)
+            {
+                if (s[index] == c) index++;
+                if (index == s.Length) return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// Problems 856. Score of Parentheses
+        /// </summary>
+        public static int ScoreOfParentheses(string s)
+        {
+            int ans = 0,
+                balance = s.IndexOf(')'),
+                last = s.LastIndexOf('(');
+            for (int i = balance; i < s.Length; i++)
+            {
+                if (s[i] == '(') balance++;
+                else
+                {
+                    balance--;
+                    if (s[i - 1] == '(')
+                        ans += 1 << balance;
+                    if (i > last) 
+                        return ans;
+                }
+            }
+            return ans;
+        }
+        /// <summary>
+        /// Problems 316. Remove Duplicate Letters
+        /// </summary>
+        public static string RemoveDuplicateLetters(string s)
+        {
+            // 貪婪演算法(Greedy):"現況"最佳解
+            if (s == String.Empty) return String.Empty;
+
+            string lead = "";
+            int[] letterCount = new int[26];
+            int pos = 0;
+            foreach (char c in s)
+            {
+                letterCount[c - 'a']++;
+            }
+            while (pos < s.Length && letterCount[s[pos] - 'a'] == 1)
+            {
+                letterCount[s[pos] - 'a']--;
+                lead += s[pos];
+                pos++;
+            }
+            for (int i = pos; i < s.Length; i++)
+            {
+                if (s[i] < s[pos])
+                    pos = i;
+                if (--letterCount[s[i] - 'a'] == 0)
+                    break;
+            }
+            return lead + (pos < s.Length ? s[pos] + RemoveDuplicateLetters(s.Substring(pos + 1).Replace(s[pos].ToString(), "")) : "");
+        }
+        /// <summary>
+        /// Problems 1663. Smallest String With A Given Numeric Value
+        /// </summary>
+        public static string GetSmallestString(int n, int k)
+        {
+            int sum = k - n;
+            int zCount = sum / 25;
+            StringBuilder sb = new StringBuilder(n);
+            sb.Append('z', zCount);
+            if (sb.Length < n)
+                sb.Insert(0, (char)('a' + sum % 25));
+            sb.Insert(0 , "a", n - sb.Length);
+            return sb.ToString();
+        }
+        /// <summary>
+        /// Problems 1029. Two City Scheduling
+        /// </summary>
+        public int TwoCitySchedCost(int[][] costs)
+        {
+            int sum = 0,
+                Acount = 0;
+            List<int> span = new List<int>();
+            for (int i = 0; i < costs.Length; i++)
+            {
+                sum += Math.Min(costs[i][0], costs[i][1]);
+                span.Add(costs[i][0] - costs[i][1]);
+                if (costs[i][0] < costs[i][1]) Acount++;
+            }
+            // 補A或B
+            span = (Acount < costs.Length / 2) ? 
+                span.Where(i => i > 0).ToList() : 
+                span = span.Where(i => i < 0).ToList();
+            while (Acount != costs.Length / 2)
+            {
+                int minSpan = 0;
+                if (Acount < costs.Length / 2)
+                {
+                    minSpan = span.Min();
+                    sum += minSpan;
+                }
+                else
+                {
+                    minSpan = span.Max();
+                    sum -= minSpan;
+                }
+                span.Remove(minSpan);
+            }
+            return sum;
+        }
+
+
 
 
 

@@ -1179,7 +1179,7 @@ namespace LeetCode
         /// <summary>
         /// Problems 1029. Two City Scheduling
         /// </summary>
-        public int TwoCitySchedCost(int[][] costs)
+        public static int TwoCitySchedCost(int[][] costs)
         {
             int sum = 0,
                 Acount = 0;
@@ -1188,29 +1188,72 @@ namespace LeetCode
             {
                 sum += Math.Min(costs[i][0], costs[i][1]);
                 span.Add(costs[i][0] - costs[i][1]);
-                if (costs[i][0] < costs[i][1]) Acount++;
+                if (costs[i][0] <= costs[i][1]) Acount++;
             }
             // 補A或B
             span = (Acount < costs.Length / 2) ? 
                 span.Where(i => i > 0).ToList() : 
-                span = span.Where(i => i < 0).ToList();
-            while (Acount != costs.Length / 2)
+                span = span.Where(i => i <= 0).ToList();
+            while (Acount != costs.Length / 2 && span.Count > 0)
             {
                 int minSpan = 0;
                 if (Acount < costs.Length / 2)
                 {
                     minSpan = span.Min();
                     sum += minSpan;
+                    Acount++;
                 }
                 else
                 {
                     minSpan = span.Max();
                     sum -= minSpan;
+                    Acount--;
                 }
                 span.Remove(minSpan);
             }
             return sum;
         }
+        /// <summary>
+        /// Problems 33. Search in Rotated Sorted Array
+        /// </summary>
+        public int SearchI(int[] nums, int target)
+        {
+            // 二分查法可以更快
+            int iMin = 0
+                , iMax = nums.Length - 1;
+            for (int i = 0; i < nums.Length; i++)
+            {
+                if (nums[i] == target)
+                    return i;
+                else if (i == nums.Length - 1)
+                    break;
+                else if (nums[i] > nums[i + 1] && (nums[i] < target || nums[i + 1] > target))
+                    break;
+            }
+            return -1;
+        }
+        /// <summary>
+        /// Problems 81. Search in Rotated Sorted Array II
+        /// </summary>
+        public bool SearchII(int[] nums, int target)
+        {
+            // 二分法可能更快?
+            foreach (int num in nums)
+            {
+                if (num == target)
+                    return true;
+            }
+            return false;
+        }
+
+
+
+
+
+
+
+
+
 
 
 

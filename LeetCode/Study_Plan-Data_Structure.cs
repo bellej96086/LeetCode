@@ -841,4 +841,453 @@ namespace LeetCode
             return null;
         }
     }
+    internal class Data_Structure_II
+    {
+        // Day 1
+        /// <summary>
+        /// Problems 136. Single Number
+        /// </summary>
+        public int SingleNumber(int[] nums)
+        {
+            HashSet<int> numSet = new HashSet<int>();
+            foreach (int num in nums)
+            {
+                if (numSet.Contains(num)) numSet.Remove(num);
+                else numSet.Add(num);
+            }
+            // return numList[0];
+            return numSet.First();
+
+            // 公式解:XOR(^)
+            //int sum = 0;
+            //Array.ForEach(nums, num => sum ^= num);
+            //return sum;
+        }
+        /// <summary>
+        /// Problems 169. Majority Element
+        /// </summary>        
+        public static int MajorityElement(int[] nums)
+        {
+            Dictionary<int, int> numDic = new Dictionary<int, int>();
+            foreach (int num in nums)
+            {
+                if (numDic.ContainsKey(num)) numDic[num]++;
+                else numDic[num] = 1;
+            }
+            return numDic.OrderByDescending(x => x.Value).FirstOrDefault().Key;
+        }
+        /// <summary>
+        /// Problems 15. 3Sum
+        /// </summary>
+        public static IList<IList<int>> ThreeSum(int[] nums)
+        {
+            nums = nums.OrderBy(x => x).ToArray();
+            IList<IList<int>> list = new List<IList<int>>();
+            for (int i = 0; i < nums.Length - 2; i++)
+            {
+                if (i !=0 && nums[i] == nums[i - 1]) continue;
+
+                int j = i + 1, // left
+                    k = nums.Length - 1; // right
+                while (j < k)
+                {
+                    int sum = nums[i] + nums[j] + nums[k];
+                    if (sum > 0)
+                        k--;
+                    else if (sum < 0)
+                        j++;
+                    else
+                    {
+                        list.Add(new List<int>() { nums[i], nums[j], nums[k] });
+                        while (j < k && nums[j] == nums[j + 1])
+                            j++;
+                        while (k < nums.Length - 1 && nums[k] == nums[k + 1])
+                            k--;
+                        j++;
+                    }
+                }
+            }
+            return list;
+        }
+        // Day 2
+        /// <summary>
+        /// Problems 75. Sort Colors
+        /// </summary>
+        public static void SortColors(int[] nums)
+        {
+            int left = 0,
+                right = nums.Length - 1;
+            for (int i = 0; i < nums.Length; i++)
+            {
+                if (nums[i] == 0)
+                {
+                    nums[i] = nums[left];
+                    nums[left++] = 0;
+                }
+            }
+            for (int i = right; left <= i; i--)
+            {
+                if (nums[i] == 2)
+                {
+                    nums[i] = nums[right];
+                    nums[right--] = 2;
+                }
+            }
+        }
+        /// <summary>
+        /// Problems 56. Merge Intervals
+        /// </summary>        
+        public static int[][] Merge(int[][] intervals)
+        {
+            List<int[]> list = intervals.OrderBy(x => x[0]).ToList();
+            for (int i = 1; i < list.Count;i++)
+            {
+                while (i < list.Count && list[i - 1][0] <= list[i][0] && list[i][0] <= list[i - 1][1])
+                {
+                    list[i - 1][1] = Math.Max(list[i - 1][1], list[i][1]);
+                    list.RemoveAt(i);
+                }
+            }
+            return list.ToArray();
+        }
+        /// <summary>
+        /// Problems 706. Design HashMap
+        /// </summary>
+        public class MyHashMap
+        {
+            // 題目限定最多動作一萬次(包含初始值)，也可以用listnode
+            private const int maxValue = 1000001; // limit + 1
+            private int[] map;            
+            public MyHashMap()
+            {
+                map = new int[maxValue];
+                for (int i = 0; i < map.Length; i++)
+                {
+                    map[i] = -1;
+                }
+            }
+
+            public void Put(int key, int value)
+            {
+                map[key] = value;
+            }
+
+            public int Get(int key)
+            {
+                return map[key];
+            }
+
+            public void Remove(int key)
+            {
+                map[key] = -1;
+            }
+        }
+        // Day 3
+        /// <summary>
+        /// Problems 119. Pascal's Triangle II
+        /// </summary>
+        public static IList<int> GetRow(int rowIndex)
+        {
+            if (rowIndex == 0) return new List<int>() { 1 };
+            else if (rowIndex == 1) return new List<int>() { 1, 1 };
+
+            List<int> list = new List<int>() { 1, 1 };
+            for (int i = 2; i <= rowIndex; i++)
+            {
+                list.Add(1);
+                for (int j = list.Count - 2; j > 0; j--)
+                {
+                    list[j] = list[j - 1] + list[j];
+                }
+            }
+            return list;
+        }
+        /// <summary>
+        /// Problems 48. Rotate Image
+        /// </summary>        
+        public static void Rotate(int[][] matrix)
+        {
+            int n = matrix.Length; // n x n matrix
+            for (int row = 0; row < n / 2; row++)
+            {
+                for (int col = row; col < n - 1 - row; col++)
+                {
+                    int temp = matrix[row][col];
+                    matrix[row][col] = matrix[n - 1 - col][row]; // 左上>左下
+                    matrix[n - 1 - col][row] = matrix[n - 1 - row][n - 1 - col]; // 左下>右下
+                    matrix[n - 1 - row][n - 1 - col] = matrix[col][n - 1 - row]; // 右下>右上
+                    matrix[col][n - 1 - row] = temp; // 右上>左上
+                }
+            }
+        }
+        /// <summary>
+        /// Problems 59. Spiral Matrix II
+        /// </summary>
+        public static int[][] GenerateMatrix(int n)
+        {
+            int[][] matrix = new int[n][];
+            for (int i = 0; i < n; i++)
+            {
+                matrix[i] = new int[n];
+            }
+
+            //int row = 0,
+            //    col = 0;
+            //for (int i = 1; i <= n * n; i++)
+            //{
+            //    matrix[row][col] = i;
+            //    if ((row == n - 1 || matrix[row + 1][col] != 0) 
+            //        && (col > 0 && matrix[row][col - 1] == 0)) // ←
+            //        col--;
+            //    else if ((col == n - 1 || matrix[row][col + 1] != 0) 
+            //        && (row < matrix.Length - 1 && matrix[row + 1][col] == 0)) // ↓
+            //        row++;
+            //    else if (row > 0 && matrix[row - 1][col] == 0) // ↑
+            //        row--;
+            //    else // →
+            //        col++;
+            //}
+            int left = 0,
+                top = 0,
+                right = n - 1,
+                bottom = n - 1,
+                number = 1;
+            while (number <= n * n)
+            {
+                if (number == n * n) // n % 2 == 1
+                {
+                    matrix[left][top] = number;
+                    return matrix;
+                }
+
+                for (int i = left; i < right; i++)
+                {
+                    matrix[left][i] = number++;
+                }
+                left++;
+
+                for (int i = top; i < bottom; i++)
+                {
+                    matrix[i][n - 1 - top] = number++;
+                }
+                top++;
+
+                for (int i = right; i >= left; i--)
+                {
+                    matrix[right][i] = number++;
+                }
+                right--;
+
+                for (int i = bottom; i >= top; i--)
+                {
+                    matrix[i][n - 1 - bottom] = number++;
+                }
+                bottom--;
+            }
+            return matrix;
+        }
+        // Day 4
+        /// <summary>
+        /// Problems 240. Search a 2D Matrix II
+        /// </summary>
+        public bool SearchMatrix(int[][] matrix, int target)
+        {
+            for (int row = 0; row < matrix.Length; row++)
+            {
+                if (matrix[row][0] > target)
+                    break;
+                else if (matrix[row][matrix[0].Length - 1] < target)
+                    continue;
+                for (int col = 0; col < matrix[0].Length; col++)
+                {
+                    if (matrix[row][col] > target)
+                        break;
+                    else if (matrix[row][col] == target)
+                        return true;
+                }
+            }
+            return false;
+        }
+        /// <summary>
+        /// Problems 435. Non-overlapping Intervals
+        /// </summary>
+        public int EraseOverlapIntervals(int[][] intervals)
+        {
+
+        }
+        // Day 5
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        /// <summary>
+        /// Problems 
+        /// </summary>        
+
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        // Day 6
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        // Day 7
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        // Day 8
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        // Day 9
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        // Day 10
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        /// <summary>
+        /// Problems 
+        /// </summary> 
+
+        // Day 11
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        /// <summary>
+        /// Problems 
+        /// </summary> 
+
+        // Day 12
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        /// <summary>
+        /// Problems 
+        /// </summary>   
+
+        // Day 13
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        /// <summary>
+        /// Problems 
+        /// </summary>   
+
+        // Day 14
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        /// <summary>
+        /// Problems 
+        /// </summary>        
+
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        // Day 15
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        /// <summary>
+        /// Problems 
+        /// </summary>        
+
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        // Day 16
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        /// <summary>
+        /// Problems 
+        /// </summary>        
+
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        // Day 17
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        /// <summary>
+        /// Problems 
+        /// </summary>   
+
+        // Day 18
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        /// <summary>
+        /// Problems 
+        /// </summary>  
+
+        // Day 19
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        /// <summary>
+        /// Problems 
+        /// </summary>        
+
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        // Day 20
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        /// <summary>
+        /// Problems 
+        /// </summary>  
+
+        // Day 21
+        /// <summary>
+        /// Problems 
+        /// </summary>
+
+        /// <summary>
+        /// Problems 
+        /// </summary> 
+
+    }
+
 }

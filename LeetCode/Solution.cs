@@ -44,10 +44,12 @@ namespace LeetCode
             //streamChecker.Query('k'); // return False
             //streamChecker.Query('l'); // return True, because 'kl' is in the wordlist
 
-            var temp2 = Problems.GetSmallestString(5, 73);
-
-            uint n = 0b_00000010100101000001111010011100;
-            var temp = Algorithm_I.reverseBits(n);
+            //[[841,185],[295,946],[928,450],[55,806],[714,89],[787,380],[663,323],[814,265],[581,581],[850,486],[390,491],[560,678],[311,283],[145,772],[987,471],[465,611],[926,367],[782,532],[299,317],[605,260],[751,735],[614,746],[747,904],[267,653]]
+            int[][] matrix = new int[3][];
+            matrix[0] = new int[3] { 1,2,3 };
+            matrix[1] = new int[3] { 4,5,6 };
+            matrix[2] = new int[3] { 7,8,9 };
+            Data_Structure_II.GenerateMatrix(1);
         }
 
         private void MergeTwoLists() // Ex.21
